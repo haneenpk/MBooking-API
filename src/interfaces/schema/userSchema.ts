@@ -14,7 +14,7 @@ export interface IUser {
 // interface to respond to front end
 export interface IUserRes extends IUser { }
 
-export interface IUserUpdate extends Omit<IUserRes, '_id' | 'email' | 'password' | 'isBlocked'> { }
+export interface IUserUpdate extends Omit<IUserRes, '_id' | 'password' | 'isBlocked'> { }
 
 
 // for social auth credentials
@@ -41,7 +41,6 @@ export interface IApiUserRes {
 
 export interface IApiUserAuthRes extends IApiUserRes {
     accessToken: string
-    refreshToken: string
 }
 
 // api response for multiple users as data

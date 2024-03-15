@@ -33,7 +33,7 @@ export class UserUseCase {
         return isEmailExist
     }
 
-    async saveUserDetails(userData: IUserAuth | IUserSocialAuth): Promise<IApiUserAuthRes> {
+    async saveUserDetails(userData: IUserAuth | IUserSocialAuth): Promise<any> {
         const user = await this.userRepository.saveUser(userData)
         // console.log('user data saved, on usecase', user);
         const accessToken = this.jwt.generateAccessToken(user._id)
@@ -59,8 +59,12 @@ export class UserUseCase {
         return await this.tempUserRepository.updateOTP(id, email, OTP)
     }
 
-    async findTempUserById(id: ID){
-        return await this.tempUserRepository.findById(id)
+    async findTempUserByEmail(email: string){
+        return await this.tempUserRepository.findByEmail(email)
+    }
+    
+    async deleteTempUserByEmail(email: string){
+        return await this.tempUserRepository.deleteByEmail(email)
     }
 
     // To send an otp to user that will expire after a certain period
@@ -87,19 +91,16 @@ export class UserUseCase {
                     message: 'You are blocked by admin',
                     data: null,
                     accessToken: '',
-                    refreshToken: ''
                 }
             } else {
                 const passwordMatch = await this.encrypt.comparePasswords(password, userData.password as string)
                 if (passwordMatch) {
                 const accessToken = this.jwt.generateAccessToken(userData._id)
-                const refreshToken = this.jwt.generateRefreshToken(userData._id)
                     return {
                         status: STATUS_CODES.OK,
                         message: 'Success',
                         data: userData,
                         accessToken,
-                        refreshToken
                     }
                 }else{
                     return {
@@ -107,7 +108,6 @@ export class UserUseCase {
                         message: 'Incorrect Password',
                         data: null,
                         accessToken: '',
-                        refreshToken: ''
                     }
                 }
             }
@@ -118,7 +118,6 @@ export class UserUseCase {
             message: 'Invalid email or password!',
             data: null,
             accessToken: '',
-            refreshToken: ''
         };
 
     }

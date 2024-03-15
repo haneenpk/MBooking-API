@@ -24,6 +24,9 @@ export class TempUserRepository implements ITempUserRepo {
     async findByEmail(email: string): Promise<ITempUserRes | null> {
         return await tempUserModel.findOne({ email })
     }
+    async deleteByEmail(email: string): Promise<void> {
+         await tempUserModel.deleteOne({ email })
+    }
     async findById(id: ID): Promise<ITempUserRes | null> {
         return await tempUserModel.findById({ _id: id })
     }

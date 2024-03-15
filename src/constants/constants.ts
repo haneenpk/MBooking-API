@@ -1,7 +1,7 @@
 export const OTP_TIMER = 1000 * 60 * 3  
 export const TheaterShowLimit = 6
 export const maxDistance = 100 // users can see theaters in 100 km radius
-export const accessTokenExp = 3 * 60 * 60 // 3 hour
+export const accessTokenExp = 10 * 24 * 60 * 60; // 10 days in seconds
 export const refreshTokenExp = 24 * 60 * 60 // 24 hour
 export const tempTokenExp = 10 * 60 // 10 min
 
