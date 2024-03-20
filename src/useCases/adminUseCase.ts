@@ -27,7 +27,7 @@ export class AdminUseCase {
             }else{
                 return {
                     status: STATUS_CODES.UNAUTHORIZED,
-                    message: 'Invalid Email or Password',
+                    message: 'Incorrect Password',
                     data : null,
                     accessToken: '',
                 }

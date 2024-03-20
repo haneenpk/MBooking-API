@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 import { ITheaterRes, ITheatersAndCount } from "./schema/theaterSchema";
-import { IUserRes,IUsersAndCount } from "./schema/userSchema";
+import { IAllUsers, IUserRes } from "./schema/userSchema";
 import { ITempTheaterRes } from "./schema/tempTheaterSchema";
 import { IScreen } from "./schema/screenSchema";
 import { IAvailCatsOnScreen, IScreenSeat } from "./schema/screenSeatSchema";
@@ -15,7 +15,6 @@ export interface IUserAddress {
     state: string
     district: string
     city: string
-    zip: number
 }
 
 export interface ITheaterAddress extends IUserAddress {
@@ -28,9 +27,7 @@ export interface ICoords {
 }
 
 export type AllResTypes = ITheaterRes | ITheaterRes[] | ITempTheaterRes | IAvailCatsOnScreen |
-            IUserRes | IUserRes[] | IScreen | IScreen[] | IScreenSeat | IUsersAndCount | ITheatersAndCount | null 
-
-// export type SuccessTypes = Exclude<AllResTypes>
+            IUserRes | IUserRes[] | IAllUsers | IScreen | IScreen[] | IScreenSeat | ITheatersAndCount | null
 
 export interface IApiRes<T extends AllResTypes> {
     status: number;

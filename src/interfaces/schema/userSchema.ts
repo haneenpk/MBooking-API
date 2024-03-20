@@ -50,7 +50,6 @@ export interface IApiUsersRes {
     data: IUserRes[] | null
 }
 
-export interface IUsersAndCount {
-    users: IUserRes[],
-    userCount: number
+export interface IAllUsers {
+    users: IUserRes[];
 }

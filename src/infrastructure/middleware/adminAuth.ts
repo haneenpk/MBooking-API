@@ -10,6 +10,9 @@ const { UNAUTHORIZED, INTERNAL_SERVER_ERROR } = STATUS_CODES
 export const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.headers.authorization;
+
+      console.log("Pathname: ", req.path); // Log the pathname
+      
       
       if (token) {
   

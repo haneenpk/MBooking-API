@@ -7,12 +7,10 @@ import { TempUserRepository } from "../infrastructure/repositories/tempUserRepos
 import { UserRepository } from "../infrastructure/repositories/userRepository";
 import { IApiRes, ID } from "../interfaces/common";
 import { ITempUserReq, ITempUserRes } from "../interfaces/schema/tempUserSchema";
-import { IApiUserAuthRes, IApiUserRes, IUser, IUserAuth, IUserRes, IUserSocialAuth, IUserUpdate, IUsersAndCount } from "../interfaces/schema/userSchema";
+import { IApiUserAuthRes, IApiUserRes, IUser, IUserAuth, IUserRes, IUserSocialAuth, IUserUpdate } from "../interfaces/schema/userSchema";
 import { Encrypt } from "../providers/bcryptPassword";
 import { JWTToken } from "../providers/jwtToken";
 import { MailSender } from "../providers/nodemailer";
-import path from "path";
-import fs from 'fs'
 
 export class UserUseCase {
     constructor(
@@ -35,35 +33,31 @@ export class UserUseCase {
 
     async saveUserDetails(userData: IUserAuth | IUserSocialAuth): Promise<any> {
         const user = await this.userRepository.saveUser(userData)
-        // console.log('user data saved, on usecase', user);
-        const accessToken = this.jwt.generateAccessToken(user._id)
-        const refreshToken = this.jwt.generateRefreshToken(user._id)
+
         return {
             status: STATUS_CODES.OK,
             data: user,
             message: 'Success',
-            accessToken,
-            refreshToken
         }
     }
 
-    async saveUserTemporarily(userData: ITempUserReq): Promise<ITempUserRes & { userAuthToken: string}> {
-        
+    async saveUserTemporarily(userData: ITempUserReq): Promise<ITempUserRes & { userAuthToken: string }> {
+
         const user = await this.tempUserRepository.saveUser(userData)
         // console.log(user, 'temp user saved');
-        const userAuthToken = this.jwt.generateTempToken(user._id) 
-        return { ...JSON.parse(JSON.stringify(user)), userAuthToken} 
+        const userAuthToken = this.jwt.generateTempToken(user._id)
+        return { ...JSON.parse(JSON.stringify(user)), userAuthToken }
     }
 
     async updateOtp(id: ID, email: string, OTP: number) {
         return await this.tempUserRepository.updateOTP(id, email, OTP)
     }
 
-    async findTempUserByEmail(email: string){
+    async findTempUserByEmail(email: string) {
         return await this.tempUserRepository.findByEmail(email)
     }
-    
-    async deleteTempUserByEmail(email: string){
+
+    async deleteTempUserByEmail(email: string) {
         return await this.tempUserRepository.deleteByEmail(email)
     }
 
@@ -71,8 +65,8 @@ export class UserUseCase {
     sendTimeoutOTP(id: ID, email: string, OTP: number) {
         try {
             this.mailer.sendOTP(email, OTP)
-                    
-            setTimeout(async() => {
+
+            setTimeout(async () => {
                 await this.tempUserRepository.unsetOtp(id, email)
             }, OTP_TIMER)
 
@@ -95,14 +89,14 @@ export class UserUseCase {
             } else {
                 const passwordMatch = await this.encrypt.comparePasswords(password, userData.password as string)
                 if (passwordMatch) {
-                const accessToken = this.jwt.generateAccessToken(userData._id)
+                    const accessToken = this.jwt.generateAccessToken(userData._id)
                     return {
                         status: STATUS_CODES.OK,
                         message: 'Success',
                         data: userData,
                         accessToken,
                     }
-                }else{
+                } else {
                     return {
                         status: STATUS_CODES.UNAUTHORIZED,
                         message: 'Incorrect Password',
@@ -122,14 +116,11 @@ export class UserUseCase {
 
     }
 
-    async getAllUsers(page: number, limit: number, searchQuery: string | undefined): Promise<IApiRes<IUsersAndCount | null>>{
+    async getUsers(): Promise<IApiRes<{users: IUserRes[]}> | IApiRes<null>> {
         try {
-            if (isNaN(page)) page = 1
-            if (isNaN(limit)) limit = 10
-            if (!searchQuery) searchQuery = ''
-            const users = await this.userRepository.findAllUsers(page, limit, searchQuery)
-            const userCount = await this.userRepository.findUserCount(searchQuery)
-            return get200Response({ users, userCount })
+            const users = await this.userRepository.findUsers()
+            return get200Response({ users })
+
         } catch (error) {
             return get500Response(error as Error)
         }
@@ -144,58 +135,20 @@ export class UserUseCase {
         }
     }
 
-    async getUserData (userId: ID): Promise<IApiUserRes> {
+    async getUserData(userId: ID): Promise<IApiUserRes> {
         try {
             const user = await this.userRepository.getUserData(userId)
-            if(user) return get200Response(user)
+            if (user) return get200Response(user)
             else return getErrorResponse(STATUS_CODES.BAD_REQUEST)
         } catch (error) {
             return get500Response(error as Error)
         }
     }
 
-    async updateUserData (userId: ID, user: IUserUpdate): Promise<IApiUserRes> {
+    async updateUserData(userId: ID, user: IUserUpdate): Promise<IApiUserRes> {
         try {
             const updatedUser = await this.userRepository.updateUser(userId, user)
             return get200Response(updatedUser as IUserRes)
-        } catch (error) {
-            return get500Response(error as Error)
-        }
-    }
-
-    async updateUserProfilePic (userId: ID, fileName: string | undefined): Promise<IApiUserRes> {
-        try {
-            if (!fileName) return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'We didnt got the image, try again')
-            log(userId, fileName, 'userId, filename from use case')
-            const user = await this.userRepository.findById(userId)
-            // Deleting user dp if it already exist
-            if (user && user.profilePic) {
-                const filePath = path.join(__dirname, `../../images/${user.profilePic}`)
-                fs.unlinkSync(filePath);
-            }
-            const updatedUser = await this.userRepository.updateUserProfilePic(userId, fileName)
-            if (updatedUser) return get200Response(updatedUser)
-            else return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'Invalid userId')
-        } catch (error) {
-            return get500Response(error as Error)
-        }
-    }
-
-    async removeUserProfileDp (userId: ID): Promise<IApiUserRes> {
-        try {
-            const user = await this.userRepository.findById(userId)
-            if (!user) return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'Invalid userId')
-            // Deleting user dp if it already exist
-            if (user.profilePic) {
-                const filePath = path.join(__dirname, `../../images/${user.profilePic}`)
-                fs.unlinkSync(filePath);
-            }
-            const updatedUser = await this.userRepository.removeUserProfileDp(userId)
-            if (updatedUser) {
-                return get200Response(updatedUser) 
-            }
-            
-            return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'Invalid userId')
         } catch (error) {
             return get500Response(error as Error)
         }

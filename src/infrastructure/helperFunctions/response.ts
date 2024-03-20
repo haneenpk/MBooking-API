@@ -5,7 +5,7 @@ export function get200Response<T extends AllResTypes>(data: T): IApiRes<T> {
     return {
         status: STATUS_CODES.OK,
         message: 'Success',
-        data: data
+        data
     };
 }
 

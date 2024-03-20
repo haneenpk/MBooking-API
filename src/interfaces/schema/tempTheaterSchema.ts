@@ -3,6 +3,7 @@ import { IApiRes, ID, ITheaterAddress } from "../common"
 export interface ITempTheaterReq {
     name: string
     email: string
+    mobile: number
     otp: number
     password: string
     address: ITheaterAddress

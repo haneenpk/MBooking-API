@@ -18,7 +18,7 @@ export interface ITheaterRes {
     name: string
     email: string
     mobile?: number
-    password: string
+    password?: string
     isBlocked: boolean
     profilePic?: string
     screenCount?: number
@@ -30,6 +30,7 @@ export interface ITheaterUpdate extends Omit<ITheaterRes, '_id' | 'email' | 'isB
 export interface ITheaterAuth {
     name: string
     email: string,
+    mobile:number,
     password: string
     address: ITheaterAddress
 }
@@ -45,7 +46,6 @@ export interface IApiTheaterAuthRes {
     message: string
     data: ITheaterRes | null
     accessToken: string
-    refreshToken: string
 }
 
 export interface IApiTheatersRes {

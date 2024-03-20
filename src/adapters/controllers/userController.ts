@@ -2,9 +2,8 @@ import { Request, Response } from "express";
 import { UserUseCase } from "../../useCases/userUseCase";
 import { GenerateOtp } from "../../providers/otpGenerator";
 import { Encrypt } from "../../providers/bcryptPassword";
-import { IUser, IUserAuth, IUserSocialAuth, IUserUpdate } from "../../interfaces/schema/userSchema";
+import { IUser, IUserAuth, IUserUpdate } from "../../interfaces/schema/userSchema";
 import { ITempUserReq } from "../../interfaces/schema/tempUserSchema";
-// import jwt, { JwtPayload } from "jsonwebtoken";
 import { STATUS_CODES } from "../../constants/httpStatusCodes";
 import { ID } from "../../interfaces/common";
 
@@ -125,17 +124,6 @@ export class UserController {
         }
     }
 
-    // async userSocialSignUp( req: Request, res: Response){
-    //     try {
-    //         const { name, email, profilePic } = req.body as IUserSocialAuth
-    //         const authData = await this.userUseCase.handleSocialSignUp(name, email, profilePic as string)
-    //         res.status(authData.status).json(authData)
-    //     } catch (error) {
-    //         const err = error as Error
-    //         res.status(500).json({message: err.message })
-    //     }
-    // }
-
     // to get user data using userId
     async getUserData(req: Request, res: Response) {
         const userId: ID = req.params.userId as unknown as ID
@@ -153,16 +141,4 @@ export class UserController {
         res.status(apiRes.status).json(apiRes)
     }
 
-    // async updateUserProfileDp (req: Request, res: Response) {
-    //     const userId: ID = req.params.userId as unknown as ID
-    //     const fileName = req.file?.filename
-    //     const apiRes = await this.userUseCase.updateUserProfilePic(userId, fileName)
-    //     res.status(apiRes.status).json(apiRes)
-    // }
-
-    // async removeUserProfileDp (req: Request, res: Response) { 
-    //     const userId: ID = req.params.userId as unknown as ID
-    //     const apiRes = await this.userUseCase.removeUserProfileDp(userId)
-    //     res.status(apiRes.status).json(apiRes)
-    // }
 }

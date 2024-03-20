@@ -21,31 +21,9 @@ export class UserRepository implements IUserRepo {
     async findByUsername(username: string): Promise< IUser | null > {
         return await userModel.findOne({ username })
     }
-
-    async findAllUsers(page: number, limit: number, searchQuery: string): Promise< IUserRes[]> {
-        const regex = new RegExp(searchQuery, 'i')
-        return await userModel.find({
-            $or: [
-                { name: { $regex: regex } },
-                { email: { $regex: regex } },
-                { mobile: { $regex: regex } }
-            ]
-        })
-        .skip((page -1) * limit)
-        .limit(limit)
-        .select('-password')
-        .exec()
-    }
-
-    async findUserCount (searchQuery: string = ''): Promise<number> {
-        const regex = new RegExp(searchQuery, 'i')
-        return await userModel.countDocuments({
-            $or: [
-                { username: { $regex: regex } },
-                { email: { $regex: regex } },
-                { mobile: { $regex: regex } }
-            ]
-        });
+    
+    async findUsers():Promise< IUserRes[]> {
+        return await userModel.find()
     }
 
     async blockUnblockUser(userId: string) {
@@ -73,30 +51,6 @@ export class UserRepository implements IUserRepo {
                 username: user.username,
                 mobile: user.mobile,  
                 email: user.email     
-            },
-            { new: true }
-        )
-    }
-
-    async updateUserProfilePic(userId: ID, fileName: string): Promise<IUserRes | null> {
-        return await userModel.findByIdAndUpdate(
-            { _id: userId },
-            {
-                $set: {
-                    profilePic: fileName
-                }
-            },
-            { new: true }
-        )
-    }
-
-    async removeUserProfileDp(userId: ID): Promise<IUserRes | null> {
-        return await userModel.findByIdAndUpdate(
-            { _id: userId },
-            {
-                $unset: {
-                    profilePic: ''
-                }
             },
             { new: true }
         )
