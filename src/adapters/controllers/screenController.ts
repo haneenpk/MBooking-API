@@ -32,4 +32,25 @@ export class ScreenController {
     res.status(apiRes.status).json(apiRes)
   }
 
+    // To edit screen data of a theater
+    async updateScreenName(req: Request, res: Response) {
+      const screenName = req.body.screenName as string
+      const screenId: ID = req.params.screenId as unknown as ID
+      const apiRes = await this.screenUseCase.updateScreenName(screenId, screenName)
+      res.status(apiRes.status).json(apiRes)
+    }
+  
+    // To delete a screen from a theater
+    async deleteScreen(req: Request, res: Response) {
+      const screenId: ID = req.params.screenId as unknown as ID
+      const apiRes = await this.screenUseCase.deleteScreen(screenId)
+      res.status(apiRes.status).json(apiRes)
+    }
+
+    async getAvailSeatsOnScreen (req: Request, res: Response) {
+      const screenId: ID = req.params.screenId as unknown as ID
+      const apiRes = await this.screenUseCase.getAvailSeatsOnScreen(screenId)
+      res.status(apiRes.status).json(apiRes)
+    }
+
 }

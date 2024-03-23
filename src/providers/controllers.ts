@@ -1,5 +1,6 @@
 import { AdminController } from "../adapters/controllers/adminController"
 import { ScreenController } from "../adapters/controllers/screenController"
+import { ScreenSeatController } from "../adapters/controllers/screenSeatController"
 import { TheaterController } from "../adapters/controllers/theaterController"
 import { UserController } from "../adapters/controllers/userController"
 import { AdminRepository } from "../infrastructure/repositories/adminRepository"
@@ -8,6 +9,7 @@ import { ScreenSeatRepository } from "../infrastructure/repositories/screenSeatR
 import { TheaterRepository } from "../infrastructure/repositories/theaterRepository"
 import { TempTheaterRepository } from "../infrastructure/repositories/tempTheaterRepository"
 import { AdminUseCase } from "../useCases/adminUseCase"
+import { ScreenSeatUseCase } from "../useCases/screenSeatUseCase"
 import { ScreenUseCase } from "../useCases/screenUseCase"
 import { UserRepository } from "../infrastructure/repositories/userRepository"
 import { TempUserRepository } from "../infrastructure/repositories/tempUserRepository"
@@ -35,8 +37,10 @@ const adminUseCase = new AdminUseCase(encrypt, adminRepository, jwtToken)
 const userUseCase = new UserUseCase(userRepository, tempUserRepository, encrypt, jwtToken, mailSender)
 const thrUseCase = new TheaterUseCase(thrRepository, tempThrRepository, encrypt, jwtToken, mailSender, otpGenerator)
 const scnUseCase = new ScreenUseCase(scnRepositoty, screenSeatRepositoty, thrRepository)
+const screenSeatUseCase = new ScreenSeatUseCase(screenSeatRepositoty, scnRepositoty)
 
 export const uController = new UserController(userUseCase, otpGenerator, encrypt )
 export const aController = new AdminController(adminUseCase, userUseCase, thrUseCase)
 export const tController = new TheaterController(thrUseCase)
 export const scnController = new ScreenController(scnUseCase)
+export const screenSeatController = new ScreenSeatController(screenSeatUseCase)

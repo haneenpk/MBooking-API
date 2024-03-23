@@ -26,7 +26,11 @@ export class ScreenRepository implements IScreenRepo {
         )
     }
 
-    async updateSeatCount (seatId: ID, seatsCount: number, rows: string): Promise<IScreen | null> {
+    async deleteScreen (screenId: ID): Promise<IScreen | null> {
+        return await screenModel.findByIdAndDelete(screenId)
+    }
+
+    async updateSeatCount (seatId: ID, seatsCount: number, rows: number): Promise<IScreen | null> {
         return await screenModel.findOneAndUpdate (
             { seatId },
             {
