@@ -11,6 +11,8 @@ import { IApiUserAuthRes, IApiUserRes, IUser, IUserAuth, IUserRes, IUserSocialAu
 import { Encrypt } from "../providers/bcryptPassword";
 import { JWTToken } from "../providers/jwtToken";
 import { MailSender } from "../providers/nodemailer";
+import path from "path";
+import fs from 'fs'
 
 export class UserUseCase {
     constructor(
@@ -149,6 +151,44 @@ export class UserUseCase {
         try {
             const updatedUser = await this.userRepository.updateUser(userId, user)
             return get200Response(updatedUser as IUserRes)
+        } catch (error) {
+            return get500Response(error as Error)
+        }
+    }
+
+    async updateUserProfilePic (userId: string, fileName: string | undefined): Promise<IApiUserRes> {
+        try {
+            if (!fileName) return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'We didnt got the image, try again')
+            log(userId, fileName, 'userId, filename from use case')
+            const user = await this.userRepository.findById(userId)
+            // Deleting user dp if it already exist
+            if (user && user.profilePic) {
+                const filePath = path.join(__dirname, `../../${user.profilePic}`)
+                fs.unlinkSync(filePath);
+            }
+            const updatedUser = await this.userRepository.updateUserProfilePic(userId, fileName)
+            if (updatedUser) return get200Response(updatedUser)
+            else return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'Invalid userId')
+        } catch (error) {
+            return get500Response(error as Error)
+        }
+    }
+
+    async removeUserProfileDp (userId: string): Promise<IApiUserRes> {
+        try {
+            const user = await this.userRepository.findById(userId)
+            if (!user) return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'Invalid userId')
+            // Deleting user dp if it already exist
+            if (user.profilePic) {
+                const filePath = path.join(__dirname, `../../${user.profilePic}`)
+                fs.unlinkSync(filePath);
+            }
+            const updatedUser = await this.userRepository.removeUserProfileDp(userId)
+            if (updatedUser) {
+                return get200Response(updatedUser) 
+            }
+            
+            return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'Invalid userId')
         } catch (error) {
             return get500Response(error as Error)
         }

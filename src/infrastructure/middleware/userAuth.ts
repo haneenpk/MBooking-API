@@ -8,6 +8,9 @@ const { FORBIDDEN, UNAUTHORIZED, INTERNAL_SERVER_ERROR } = STATUS_CODES
 
 export const userAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
+
+        console.log("haloo");
+        
         
         const token = req.headers.authorization
         if(token) {

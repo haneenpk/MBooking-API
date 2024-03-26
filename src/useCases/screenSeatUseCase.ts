@@ -29,7 +29,6 @@ export class ScreenSeatUseCase {
             if (seat) {
                 const seatCount = getSeatCount(seatData)
                 const lastRow = getLastRow(seatData)
-                console.log(lastRow);
                 const asciiCodeOfA = lastRow.charCodeAt(0);
 
                 const screen = await this.screenRepository.updateSeatCount(seat._id, seatCount, asciiCodeOfA - 64)

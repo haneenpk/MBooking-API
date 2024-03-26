@@ -6,6 +6,12 @@ import { IUser, IUserAuth, IUserUpdate } from "../../interfaces/schema/userSchem
 import { ITempUserReq } from "../../interfaces/schema/tempUserSchema";
 import { STATUS_CODES } from "../../constants/httpStatusCodes";
 import { ID } from "../../interfaces/common";
+import multer, { Multer } from 'multer';
+
+// Define the type for Express Request with multer file property
+interface MulterRequest extends Request {
+  file: Express.Multer.File;
+}
 
 
 export class UserController {
@@ -138,6 +144,21 @@ export class UserController {
         const userId: ID = req.params.userId as unknown as ID
         const apiRes = await this.userUseCase.updateUserData(userId, user)
         
+        res.status(apiRes.status).json(apiRes)
+    }
+
+    async updateUserProfileDp (req: Request, res: Response) {
+        const userId = req.params.userId
+        const fileName = req.file?.path
+        console.log("Form Data:", req.body); 
+        console.log("File:", fileName);
+        const apiRes = await this.userUseCase.updateUserProfilePic(userId, fileName)
+        res.status(apiRes.status).json(apiRes)
+    }
+
+    async removeUserProfileDp (req: Request, res: Response) { 
+        const userId = req.params.userId
+        const apiRes = await this.userUseCase.removeUserProfileDp(userId)
         res.status(apiRes.status).json(apiRes)
     }
 

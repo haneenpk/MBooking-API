@@ -10,7 +10,7 @@ export class UserRepository implements IUserRepo {
         return await new userModel(user).save()
     }
 
-    async findById(id: ID): Promise< IUser | null > {
+    async findById(id: string): Promise< IUser | null > {
         return await userModel.findById({_id: id})
     }
 
@@ -51,6 +51,30 @@ export class UserRepository implements IUserRepo {
                 username: user.username,
                 mobile: user.mobile,  
                 email: user.email     
+            },
+            { new: true }
+        )
+    }
+
+    async updateUserProfilePic(userId: string, fileName: string): Promise<IUserRes | null> {
+        return await userModel.findByIdAndUpdate(
+            { _id: userId },
+            {
+                $set: {
+                    profilePic: fileName
+                }
+            },
+            { new: true }
+        )
+    }
+
+    async removeUserProfileDp(userId: string): Promise<IUserRes | null> {
+        return await userModel.findByIdAndUpdate(
+            { _id: userId },
+            {
+                $unset: {
+                    profilePic: ''
+                }
             },
             { new: true }
         )
