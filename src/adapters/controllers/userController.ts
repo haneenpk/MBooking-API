@@ -6,7 +6,6 @@ import { IUser, IUserAuth, IUserUpdate } from "../../interfaces/schema/userSchem
 import { ITempUserReq } from "../../interfaces/schema/tempUserSchema";
 import { STATUS_CODES } from "../../constants/httpStatusCodes";
 import { ID } from "../../interfaces/common";
-import multer, { Multer } from 'multer';
 
 // Define the type for Express Request with multer file property
 interface MulterRequest extends Request {

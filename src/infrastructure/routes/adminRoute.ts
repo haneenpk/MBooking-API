@@ -7,6 +7,10 @@ const adminRouter = express.Router()
 
 adminRouter.post('/login',  (req, res) => aController.adminLogin(req, res))
 
+adminRouter.get('/get/:adminId', adminAuth,  (req,res) => aController.getAdminData(req,res))
+
+adminRouter.put('/update/:adminId', adminAuth, (req,res) => aController.updateProfile(req,res))
+
 adminRouter.get('/users', adminAuth, (req, res) => aController.getUsers(req,res))
 adminRouter.patch('/users/block/:userId', adminAuth, (req, res) => aController.blockUser(req,res))
 adminRouter.get('/theaters', adminAuth, (req, res) => aController.getTheaters(req,res))

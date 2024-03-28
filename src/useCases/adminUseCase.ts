@@ -1,6 +1,8 @@
 import { STATUS_CODES } from "../constants/httpStatusCodes";
+import { get200Response, get500Response, getErrorResponse } from "../infrastructure/helperFunctions/response";
 import { AdminRepository } from "../infrastructure/repositories/adminRepository";
-import { IApiAdminAuthRes } from "../interfaces/schema/adminSchema";
+import { ID } from "../interfaces/common";
+import { IApiAdminAuthRes, IApiAdminRes, IAdminUpdate, IAdminRes } from "../interfaces/schema/adminSchema";
 import { Encrypt } from "../providers/bcryptPassword";
 import { JWTToken } from "../providers/jwtToken";
 
@@ -39,6 +41,25 @@ export class AdminUseCase {
                 data: null,
                 accessToken: '',
             }
+        }
+    }
+
+    async getAdminData(adminId: ID): Promise<IApiAdminRes> {
+        try {
+            const admin = await this.adminRepository.getAdminData(adminId)
+            if (admin) return get200Response(admin)
+            else return getErrorResponse(STATUS_CODES.BAD_REQUEST)
+        } catch (error) {
+            return get500Response(error as Error)
+        }
+    }
+
+    async updateAdminData(adminId: ID, admin: IAdminUpdate): Promise<IApiAdminRes> {
+        try {
+            const updatedAdmin = await this.adminRepository.updateAdmin(adminId, admin)
+            return get200Response(updatedAdmin as IAdminRes)
+        } catch (error) {
+            return get500Response(error as Error)
         }
     }
 

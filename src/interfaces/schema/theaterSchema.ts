@@ -11,7 +11,6 @@ export interface ITheater {
     profilePic?: string
     screenCount?: number
     address: ITheaterAddress,
-    subscriptionId: ID
 }
 
 export interface ITheaterRes {
@@ -24,7 +23,6 @@ export interface ITheaterRes {
     profilePic?: string
     screenCount?: number
     address: ITheaterAddress,
-    subscriptionId: ID
 }
 
 export interface ITheaterUpdate extends Omit<ITheaterRes, '_id' | 'email' | 'isBlocked' | 'screenCount' | 'subscriptionId'> {}

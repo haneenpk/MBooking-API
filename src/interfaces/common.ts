@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 import { ITheaterRes, ITheatersAndCount } from "./schema/theaterSchema";
 import { IAllUsers, IUserRes } from "./schema/userSchema";
+import { IAdminRes, IApiAdminRes } from "./schema/adminSchema";
 import { IAllUpcoming, IUpcomingRes } from "./schema/upcomingSchema";
 import { ITempTheaterRes } from "./schema/tempTheaterSchema";
 import { IScreen } from "./schema/screenSchema";
@@ -30,7 +31,7 @@ export interface ICoords {
 
 export type AllResTypes = ITheaterRes | ITheaterRes[] | ITempTheaterRes | IAvailCatsOnScreen |
             IUserRes | IUserRes[] | IAllUsers | IScreen | IScreen[] | IScreenSeat | ITheatersAndCount | null |
-            ISubscription | ISubscription[] | IUpcomingRes | IUpcomingRes[] | IAllUpcoming
+            ISubscription | ISubscription[] | IUpcomingRes | IUpcomingRes[] | IAllUpcoming | IAdminRes | IApiAdminRes 
 
 export interface IApiRes<T extends AllResTypes> {
     status: number;

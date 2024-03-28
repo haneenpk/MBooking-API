@@ -49,8 +49,7 @@ export class UserRepository implements IUserRepo {
             { _id: userId },
             {
                 username: user.username,
-                mobile: user.mobile,  
-                email: user.email     
+                mobile: user.mobile,    
             },
             { new: true }
         )

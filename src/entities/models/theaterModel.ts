@@ -17,13 +17,6 @@ const theaterSchema: Schema = new Schema<ITheater & Document>({
         default: 0,
         required: true
     },
-    subscriptionId: { 
-        type: Schema.Types.ObjectId,
-        ref: 'Subscriptions',
-        required: true,
-        unique: true,
-        readonly: true
-    }
 },
 {
     timestamps: true

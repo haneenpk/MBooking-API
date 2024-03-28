@@ -3,6 +3,10 @@ import { IAdmin } from "../../interfaces/schema/adminSchema";
 import { emailSchema } from "./base/emailSchema";
 
 const adminSchema: Schema = new Schema<IAdmin & Document>({
+    name: {
+        type:String,
+        required: true
+    },
     password: {
         type:String,
         required: true
