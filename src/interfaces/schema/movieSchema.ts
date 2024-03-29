@@ -1,37 +1,40 @@
 import { ID } from "../common"
 
 // interface specifically for userSchema
-export interface IUpcoming {
+export interface IMovie {
     _id: ID; 
     moviename: string;
     image: string;
     languages: string[];
     genre: string[];
+    cast: string[];
     description: string;
+    duration: string;
+    type: string;
     releaseDate: Date;
 }
 
 // interface to respond to front end
-export interface IUpcomingRes extends IUpcoming { }
+export interface IMovieRes extends IMovie { }
 
-export interface IUpcomingRequirements extends Omit<IUpcoming, '_id'> {}
+export interface IMovieRequirements extends Omit<IMovie, '_id'> {}
 
-export interface IUpcomingUpdate extends Omit<IUpcomingRes, '_id' | 'image'> { }
+export interface IMovieUpdate extends Omit<IMovieRes, '_id' | 'image'> { }
 
 // api response for single user as data
-export interface IApiUpcomingRes {
+export interface IApiMovieRes {
     status: number
     message: string
-    data: IUpcomingRes | null
+    data: IMovieRes | null
 }
 
 // api response for multiple users as data
 export interface IApiUpcomingsRes {
     status: number
     message: string
-    data: IUpcomingRes[] | null
+    data: IMovieRes[] | null
 }
 
 export interface IAllUpcoming {
-    upcomings: IUpcomingRes[];
+    movies: IMovieRes[];
 }

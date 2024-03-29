@@ -3,7 +3,7 @@ import { STATUS_CODES } from "../constants/httpStatusCodes";
 import { get200Response, get500Response, getErrorResponse } from "../infrastructure/helperFunctions/response";
 import { UpcomingRepository } from "../infrastructure/repositories/upcomingRepository";
 import { IUpcoming, IUpcomingRequirements, IUpcomingRes, IApiUpcomingRes, IUpcomingUpdate } from "../interfaces/schema/upcomingSchema";
-import { IApiRes, ID } from "../interfaces/common";
+import { ID } from "../interfaces/common";
 import path from "path";
 import fs from 'fs'
 
@@ -13,9 +13,9 @@ export class UpcomingUseCase {
         private readonly upcomingRepository: UpcomingRepository,
     ){}
 
-    async isMovienameExist(moviename: string): Promise<IUpcoming | null> {
-        const isMovienameExist = await this.upcomingRepository.findByMoviename(moviename)
-        return isMovienameExist
+    async isUpcomingMovienameExist(moviename: string): Promise<IUpcoming | null> {
+        const isUpcomingMovienameExist = await this.upcomingRepository.findByMoviename(moviename)
+        return isUpcomingMovienameExist
     }
 
     async deleteImage (fileName: string | undefined): Promise<void> {
@@ -87,8 +87,8 @@ export class UpcomingUseCase {
 
     async updateUpcomingMovies(upcomingId: ID, upcomingMovie: IUpcomingUpdate): Promise<IApiUpcomingRes> {
         try {
-            const updatedUser = await this.upcomingRepository.updateUpcomingMovies(upcomingId, upcomingMovie)
-            return get200Response(updatedUser as IUpcomingRes)
+            const updatedUpcoming = await this.upcomingRepository.updateUpcomingMovies(upcomingId, upcomingMovie)
+            return get200Response(updatedUpcoming as IUpcomingRes)
         } catch (error) {
             return get500Response(error as Error)
         }

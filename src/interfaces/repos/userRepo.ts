@@ -7,5 +7,4 @@ export interface IUserRepo {
     findByUsername(username: string): Promise< IUser | null >    
     findUsers():Promise< IUser[]>
 
-
 }

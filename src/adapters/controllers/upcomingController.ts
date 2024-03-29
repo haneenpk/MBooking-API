@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { UpcomingUseCase } from "../../useCases/upcomingUseCase";
-import { IAdmin } from "../../interfaces/schema/adminSchema";
 import { STATUS_CODES } from "../../constants/httpStatusCodes";
-import { UserUseCase } from "../../useCases/userUseCase";
-import { TheaterUseCase } from "../../useCases/theaterUseCase";
 import { ID } from "../../interfaces/common";
 
 export class UpcomingController {
@@ -15,7 +12,7 @@ export class UpcomingController {
 
         try {
 
-            const isMovienameExist = await this.upcomingUseCase.isMovienameExist(req.body.moviename)
+            const isMovienameExist = await this.upcomingUseCase.isUpcomingMovienameExist(req.body.moviename)
             const fileName = req.file?.path
 
             if (isMovienameExist === null) {
