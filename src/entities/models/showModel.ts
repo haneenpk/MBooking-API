@@ -1,23 +1,62 @@
 import mongoose, { Model, Schema, Document } from "mongoose";
-import { IScreenSeatCategory, IScreenSeat } from "../../interfaces/schema/screenSeatSchema";
+import { IShow } from "../../interfaces/schema/showSchema";
 
-export function getScreenSeatCategorySchema(){
-    return new Schema({
-        price: {
-          type: String,
-          required: true,
-        },
-        seats: {
-          type: Map,
-          of: [Number],
-        },
-    });
+interface IShowSchema extends Omit<IShow, 'movieId' | 'screenId' | 'seatId'> {
+    movieId: Schema.Types.ObjectId,
+    screenId: Schema.Types.ObjectId,
+    seatId: Schema.Types.ObjectId,
 }
 
-export const screenSeatSchema: Schema = new Schema({
-    diamond: getScreenSeatCategorySchema(),
-    gold: getScreenSeatCategorySchema(),
-    silver: getScreenSeatCategorySchema(),
+export const showSchema: Schema = new Schema<IShowSchema>({
+    movieId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Movies',
+        required: true
+    },
+    screenId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Screens',
+        required: true
+    },
+    date: {
+        type: Date,
+        required: true
+    },
+    startTime: {
+        hour: {
+            type: Number,
+            required: true
+        },
+        minute: {
+            type: Number,
+            required: true
+        }
+    },
+    endTime: {
+        hour: {
+            type: Number,
+            required: true
+        },
+        minute: {
+            type: Number,
+            required: true
+        }
+    },
+    totalSeatCount: {
+        type: Number,
+        required: true
+    },
+    availableSeatCount: {
+        type: Number,
+        required: true
+    },
+    seatId: {
+        type: Schema.Types.ObjectId,
+        ref: 'ShowSeats',
+        required: true,
+        unique: true,
+        // immutable: [true, 'Changing seatId is forbidden']
+    }
 })
 
-export const screenSeatModel = mongoose.model('ScreenSeats', screenSeatSchema)
+export const showModel: Model<IShowSchema & Document> = mongoose.model<IShowSchema & Document>('Shows', showSchema)

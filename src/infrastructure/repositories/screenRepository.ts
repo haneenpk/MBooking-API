@@ -12,6 +12,10 @@ export class ScreenRepository implements IScreenRepo {
         return await screenModel.findById({_id: id})
     }
 
+    async findScreenBySId(id: string): Promise<IScreen | null> {
+        return await screenModel.findById({_id: id})
+    }
+
     async findScreensInTheater(theaterId: ID): Promise<IScreen[]> {
         return await screenModel.find({theaterId})
     }
