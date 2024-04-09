@@ -21,17 +21,26 @@ export class TheaterRepository implements ITheaterRepo {
         return await theaterModel.findById({ _id: id })
     }
 
-    async findTheaters():Promise< ITheaterRes[]> {
+    async findTheaters(): Promise<ITheaterRes[]> {
         return await theaterModel.find()
+    }
+
+    async selectedTheaters(country: string, district: string): Promise<ITheaterRes[]> {
+        return await theaterModel.find({
+            $and: [
+                { "address.country": country },
+                { "address.district": district },
+            ]
+        })
     }
 
     async blockTheater(theaterId: string) {
         try {
             const theater = await theaterModel.findById({ _id: theaterId })
-            
+
             if (theater !== null) {
                 theater.isBlocked = !theater.isBlocked
-                
+
                 await theater.save()
             } else {
                 throw Error('Something went wrong, theaterId did\'t received')
@@ -53,12 +62,12 @@ export class TheaterRepository implements ITheaterRepo {
         )
     }
 
-    async updateScreenCount (theaterId: ID, count: number): Promise<ITheaterRes | null> {
+    async updateScreenCount(theaterId: ID, count: number): Promise<ITheaterRes | null> {
         return await theaterModel.findByIdAndUpdate(
             { _id: theaterId },
-            { $inc: { screenCount: count }},
+            { $inc: { screenCount: count } },
             { new: true }
-        )  
+        )
     }
 
 }

@@ -3,6 +3,7 @@ import { IApiRes, ID } from "../common"
 
 export interface IShow {
     _id: ID
+    theaterId: ID
     movieId: ID
     screenId: ID
     date: Date;

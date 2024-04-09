@@ -10,6 +10,15 @@ const userSchema: Schema = new Schema<IUser & Document>({
     email: {
         type: String,
     },
+    country: {
+        type: String,
+    },
+    state: {
+        type: String,
+    },
+    district: {
+        type: String,
+    },
     password: {
         type:String
     },

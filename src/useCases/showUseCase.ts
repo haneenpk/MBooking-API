@@ -2,6 +2,7 @@ import { log } from "console";
 import { STATUS_CODES } from "../constants/httpStatusCodes";
 import { get200Response, get500Response, getErrorResponse } from "../infrastructure/helperFunctions/response";
 import { ShowRepository } from "../infrastructure/repositories/showRepository";
+import { TheaterRepository } from "../infrastructure/repositories/theaterRepository";
 import { ShowSeatsRepository } from "../infrastructure/repositories/showSeatRepository";
 import { MovieRepository } from "../infrastructure/repositories/movieRepository";
 import { ScreenRepository } from "../infrastructure/repositories/screenRepository";
@@ -22,11 +23,11 @@ export class ShowUseCase {
         private readonly movieRepository: MovieRepository,
         private readonly screenRepository: ScreenRepository,
         private readonly screenSeatRepository: ScreenSeatRepository,
+        private readonly theaterRepository: TheaterRepository,
     ) { }
 
     async addShow(show: any) {
         try {
-            console.log("show:", show);
 
             if (!show.movieId || !show.screenId || !show.startTime || !show.date) {
                 return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'Bad Request, data missing');
@@ -40,15 +41,17 @@ export class ShowUseCase {
                 if (showDate >= releaseDate) {
                     const endingTime = getEndingTime(show.startTime, movie.duration);
                     console.log(endingTime);
-                    const collidedShows = await this.showRepository.getCollidingShowsOnTheScreen(show.screenId, endingTime[0], endingTime[1]);
+                    const collidedShows = await this.showRepository.getCollidingShowsOnTheScreen(show.screenId, endingTime[0], endingTime[1], show.date);
                     if (collidedShows.length === 0) {
                         const screen = await this.screenRepository.findScreenById(show.screenId);
                         if (screen) {
+
                             const screenSeat = await this.screenSeatRepository.findScreenSeatById(screen.seatId);
                             if (screenSeat) {
                                 const showSeatToSave = createEmptyShowSeat(screenSeat, show.diamondPrice, show.goldPrice, show.silverPrice);
                                 const savedShowSeat = await this.showSeatRepository.saveShowSeat(showSeatToSave);
                                 const showToSave: IShowToSave = {
+                                    theaterId: screen.theaterId,
                                     movieId: movie._id,
                                     screenId: screen._id,
                                     date: show.date,
@@ -59,7 +62,6 @@ export class ShowUseCase {
                                     seatId: savedShowSeat._id
                                 };
                                 const savedShow = await this.showRepository.saveShow(showToSave);
-                                console.log(savedShow);
                                 return get200Response(savedShow);
                             } else {
                                 return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'Something went wrong, seatId of screen missing');
@@ -83,25 +85,108 @@ export class ShowUseCase {
         }
     }
 
-    async findShowsOnTheater(theaterId: string, dateStr: string | undefined, user: 'User' | 'Theater') {
+    async findShowsOnTheater(theaterId: string, dateStr: Date) {
         try {
-            log(dateStr === undefined, isNaN(new Date(dateStr as string).getTime()), (user === 'User' && isPast(new Date(dateStr as string))))
-            if (dateStr === undefined || isNaN(new Date(dateStr).getTime()) || (user === 'User' && isPast(new Date(dateStr)))) {
-                return getErrorResponse(STATUS_CODES.BAD_REQUEST, 'Date is not available or invalid')
-            } else {
-                const date = new Date(dateStr)
-                let from = new Date(date);
-                from.setHours(0, 0, 0, 0);
-                if (user === 'User' && isToday(from)) {
-                    from = new Date()
-                }
 
-                const to = new Date(date);
-                to.setHours(23, 59, 59, 999);
-                // console.log(typeof date, 'type from usecase')
-                // const shows = await this.showRepository.findShowsOnDate(theaterId, from, to)
-                // return get200Response(shows)
+            console.log(dateStr, theaterId);
+
+            const FirstShow = await this.showRepository.findFirstShows(dateStr, theaterId);
+
+            console.log(FirstShow)
+
+            return {
+                status: STATUS_CODES.OK,
+                message: 'Success',
+                FirstShow
             }
+        } catch (error) {
+            return get500Response(error as Error)
+        }
+    }
+
+    async findFirstShowsOnTheater(theaterId: string) {
+        try {
+            const currentDate = new Date();
+
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const dates = await this.showRepository.findDates(today, theaterId);
+
+            const FirstShow = await this.showRepository.findFirstShows(currentDate, theaterId);
+
+            console.log(dates, FirstShow)
+
+            return {
+                status: STATUS_CODES.OK,
+                message: 'Success',
+                dates,
+                FirstShow
+            }
+
+        } catch (error) {
+            return get500Response(error as Error)
+        }
+    }
+
+    async getMovies(country: string, district: string) {
+        try {
+            const availableTheater = await this.theaterRepository.selectedTheaters(country, district);
+
+            // Assuming availableTheater is an array of objects with an _id property of type ObjectId
+            let arrTheater: any[] = [];
+            for (let i = 0; i < availableTheater.length; i++) {
+                arrTheater.push(availableTheater[i]._id as any);
+            }
+
+            const selectedShow = await this.showRepository.selectedShow(arrTheater);
+
+            let arrShow: any[] = [];
+            for (let i = 0; i < selectedShow.length; i++) {
+                arrShow.push(selectedShow[i].movieId as any);
+            }
+
+            const selectedMovies = await this.movieRepository.selectedMovies(arrShow);
+
+            return get200Response(selectedMovies);
+
+        } catch (error) {
+            return get500Response(error as Error)
+        }
+    }
+
+    async getShows(country: string, district: string, movieId: string) {
+        try {
+            const availableTheater = await this.theaterRepository.selectedTheaters(country, district);
+
+            // Assuming availableTheater is an array of objects with an _id property of type ObjectId
+            let arrTheater: any[] = [];
+            for (let i = 0; i < availableTheater.length; i++) {
+                arrTheater.push(availableTheater[i]._id as any);
+            }
+
+            // const selectedShow = await this.showRepository.selectedMovieShow(arrTheater, movieId);
+
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const dates = await this.showRepository.findDatesUser(today, arrTheater, movieId);
+
+            dates.sort((a, b) => a.getTime() - b.getTime());
+
+            const selectedShow = await this.showRepository.findFirstShowsUser(dates[0], arrTheater, movieId);
+
+            console.log("dates: ", dates)
+
+            console.log("selectshow: ", selectedShow);
+
+            return {
+                status: STATUS_CODES.OK,
+                message: 'Success',
+                dates,
+                selectedShow
+            }
+
         } catch (error) {
             return get500Response(error as Error)
         }

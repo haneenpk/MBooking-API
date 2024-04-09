@@ -58,4 +58,10 @@ export class MovieRepository implements IMovieRepo {
         )
     }
 
+    async selectedMovies(selectedShow: any[]):Promise< IMovieRes[]> {                
+        return await movieModel.find({
+            _id: { $in: selectedShow },
+        })
+    }
+
 }

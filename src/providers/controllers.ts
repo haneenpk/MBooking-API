@@ -58,7 +58,7 @@ const scnUseCase = new ScreenUseCase(scnRepositoty, screenSeatRepositoty, thrRep
 const screenSeatUseCase = new ScreenSeatUseCase(screenSeatRepositoty, scnRepositoty)
 const upcUseCase = new UpcomingUseCase(upcRepositoty)
 const movieUseCase = new MovieUseCase(movieRepositoty)
-const showUseCase = new ShowUseCase(showRepositoty,showSeatsRepositoty,movieRepositoty,scnRepositoty,screenSeatRepositoty)
+const showUseCase = new ShowUseCase(showRepositoty,showSeatsRepositoty,movieRepositoty,scnRepositoty,screenSeatRepositoty,thrRepository)
 
 export const uController = new UserController(userUseCase, otpGenerator, encrypt )
 export const aController = new AdminController(adminUseCase, userUseCase, thrUseCase)

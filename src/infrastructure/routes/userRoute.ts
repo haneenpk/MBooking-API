@@ -1,6 +1,6 @@
 import express from "express";
 import { userAuth } from "../middleware/userAuth";
-import { uController } from "../../providers/controllers";
+import { uController, upcController, showController, mController, tController } from "../../providers/controllers";
 import upload from "../config/multer"; // Adjust import statement here
 
 const userRouter = express.Router()
@@ -16,5 +16,14 @@ userRouter.patch('/remove/profileimage/:userId', userAuth, (req,res) => uControl
 userRouter.put('/update/:userId', userAuth, (req,res) => uController.updateProfile(req,res))
 
 userRouter.get('/get/:userId', userAuth,  (req,res) => uController.getUserData(req,res))
+userRouter.get('/get/theater/:theaterId', userAuth,  (req,res) => tController.getTheaterData(req,res))
+
+userRouter.get('/upcomings', userAuth, (req, res) => upcController.getUpcomings(req,res))
+userRouter.get('/upcoming/get/:upcomingId', userAuth, (req, res) => upcController.findUpcomingById(req,res))
+
+userRouter.get('/movies', userAuth, (req, res) => showController.getMovies(req,res))
+userRouter.get('/movie/get/:movieId', userAuth, (req, res) => mController.findMovieById(req,res))
+
+userRouter.get('/showTime', userAuth, (req, res) => showController.getShows(req,res))
 
 export default userRouter

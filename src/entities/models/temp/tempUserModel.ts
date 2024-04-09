@@ -12,6 +12,18 @@ const tempUserSchema: Schema = new Schema<ITempUserRes & Document>({
         maxlength: 20,
         trim: true
     },
+    country: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        required: true
+    },
+    district: {
+        type: String,
+        required: true
+    },
     otp: {
         type: Number,
         // min: 1000,

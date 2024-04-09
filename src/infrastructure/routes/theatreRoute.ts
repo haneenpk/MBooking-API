@@ -24,8 +24,10 @@ thrRouter.put('/screens/seat/update/:seatId', theaterAuth, (req, res) => screenS
 thrRouter.get('/screens/get/seats/:screenId', theaterAuth, (req, res) => scnController.getAvailSeatsOnScreen(req, res))
 
 thrRouter.get('/movies', theaterAuth, (req, res) => mController.getMovies(req,res))
+thrRouter.get('/movie/get/:movieId', theaterAuth, (req, res) => mController.findMovieById(req,res))
 
 thrRouter.get('/shows/:theaterId', theaterAuth, (req, res) => showController.findShowsOnTheater(req, res))
+thrRouter.get('/shows/first/:theaterId', theaterAuth, (req, res) => showController.findFirstShowsOnTheater(req, res))
 thrRouter.post('/show/add/:theaterId', theaterAuth, (req, res) => showController.addShow(req, res))
 
 export default thrRouter

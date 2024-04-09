@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { MovieUseCase } from "../../useCases/movieUseCase";
+import { TheaterUseCase } from "../../useCases/theaterUseCase";
 import { STATUS_CODES } from "../../constants/httpStatusCodes";
 import { ID } from "../../interfaces/common";
 
@@ -11,7 +12,7 @@ export class MovieController {
     async addMovies(req: Request, res: Response) {
 
         try {
-
+            
             const isMovienameExist = await this.movieUseCase.isMovienameExist(req.body.moviename)
             const fileName = req.file?.path
 

@@ -8,6 +8,11 @@ interface IShowSchema extends Omit<IShow, 'movieId' | 'screenId' | 'seatId'> {
 }
 
 export const showSchema: Schema = new Schema<IShowSchema>({
+    theaterId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Theaters',
+        required: true
+    },
     movieId: {
         type: Schema.Types.ObjectId,
         ref: 'Movies',

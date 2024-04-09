@@ -4,6 +4,9 @@ export interface ITempUserReq {
     username: string
     email: string
     mobile:number
+    country: string
+    state: string
+    district: string
     otp: number
     password: string
 }

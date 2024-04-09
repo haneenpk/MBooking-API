@@ -5,6 +5,9 @@ export interface IUser {
     _id: ID
     username: string
     email: string
+    country: string
+    state: string
+    district: string
     password: string
     mobile: number
     isBlocked?: boolean
@@ -28,6 +31,9 @@ export interface IUserSocialAuth {
 export interface IUserAuth {
     username: string
     email: string
+    country: string
+    state: string
+    district: string
     password: string
     mobile: number
 }

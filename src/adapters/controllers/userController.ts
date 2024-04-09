@@ -22,8 +22,8 @@ export class UserController {
 
     async userRegister(req: Request, res: Response) {
         try {
-            const { username, email, mobile, password } = req.body as IUserAuth
-            console.log(username, email);
+            const { username, email, mobile, country, state, district, password } = req.body as IUserAuth
+            console.log(req.body);
 
             const isUsernameExist = await this.userUseCase.isUsernameExist(username)
             const isEmailExist = await this.userUseCase.isEmailExist(email)
@@ -34,8 +34,10 @@ export class UserController {
 
                     // console.log(OTP,'OTP');
                     const securePassword = await this.encrypt.encryptPassword(password)
-                    const user: ITempUserReq = { username, email, mobile, password: securePassword, otp: OTP }
+                    const user: ITempUserReq = { username, email, mobile, country, state, district, password: securePassword, otp: OTP }
 
+                    console.log(user);
+                    
                     const tempUser = await this.userUseCase.saveUserTemporarily(user)
 
                     this.userUseCase.sendTimeoutOTP(tempUser._id, tempUser.email, OTP)
@@ -72,6 +74,9 @@ export class UserController {
                         username: user.username,
                         email: user.email,
                         mobile: user.mobile,
+                        country: user.country,
+                        state: user.state,
+                        district: user.district,
                         password: user.password
                     })
                     console.log('user details saved, setting status 200');

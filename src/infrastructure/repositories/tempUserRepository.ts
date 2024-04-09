@@ -13,6 +13,9 @@ export class TempUserRepository implements ITempUserRepo {
                     username: user.username,
                     email: user.email,
                     mobile: user.mobile,
+                    country: user.country,
+                    state: user.state,
+                    district: user.district,
                     otp: user.otp,
                     password: user.password,
                     expireAt: Date.now()
