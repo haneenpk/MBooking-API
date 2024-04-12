@@ -70,5 +70,56 @@ export class ShowController {
         res.status(getMovies.status).json(getMovies)
     }
 
+    async getSelectShows(req: Request, res: Response) {
+    
+        const country = req.query.country as string | undefined;
+        const district = req.query.district as string | undefined;
+        const movieId = req.query.movieId as string | undefined;
+        const dateParam = req.query.date as string | undefined;
+    
+        if (country === undefined || district === undefined || movieId === undefined || dateParam === undefined) {
+            // Handle the case where country or district is undefined
+            res.status(400).json({ error: "Country and district are required." });
+            return;
+        }
+
+        const date = new Date(dateParam);
+    
+        const getSelectMovies = await this.showUseCase.getSelectShows(country, district, date, movieId);
+        
+        res.status(getSelectMovies.status).json(getSelectMovies)
+    }
+
+    
+    async editShowGet(req: Request, res: Response) {
+        try {
+            const showId = req.params.showId as unknown as string;
+    
+            const getShow = await this.showUseCase.editShowGet(showId);
+    
+            if (getShow !== undefined) {
+                res.status(getShow.status).json(getShow);
+            } else {
+                // Handle the case when getShow is undefined
+                res.status(500).json({ message: "Error: Show data not found" });
+            }
+        } catch (error) {
+            res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
+    async editShow(req: Request, res: Response) {
+        const showId = req.params.showId
+        const showReqs = req.body
+        const apiRes = await this.showUseCase.editShow(showReqs, showId)
+        res.status(apiRes.status).json(apiRes)
+    }
+
+    async deleteShow(req: Request, res: Response) {
+        const showId: ID = req.params.showId as unknown as ID
+        const apiRes = await this.showUseCase.deleteShow(showId)
+        res.status(apiRes.status).json(apiRes)
+    }
+
 }
 

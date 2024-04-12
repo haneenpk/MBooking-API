@@ -6,6 +6,7 @@ import { UserController } from "../adapters/controllers/userController"
 import { UpcomingController } from "../adapters/controllers/upcomingController"
 import { MovieController } from "../adapters/controllers/MovieController"
 import { ShowController } from "../adapters/controllers/showController"
+import { ShowSeatController } from "../adapters/controllers/showSeatController"
 
 import { AdminRepository } from "../infrastructure/repositories/adminRepository"
 import { ScreenRepository } from "../infrastructure/repositories/screenRepository"
@@ -15,12 +16,13 @@ import { TempTheaterRepository } from "../infrastructure/repositories/tempTheate
 import { UpcomingRepository } from "../infrastructure/repositories/upcomingRepository"
 import { MovieRepository } from "../infrastructure/repositories/movieRepository"
 import { ShowRepository } from "../infrastructure/repositories/showRepository"
-import { ShowSeatsRepository } from "../infrastructure/repositories/showSeatRepository"
+import { ShowSeatRepository } from "../infrastructure/repositories/showSeatRepository"
 import { UserRepository } from "../infrastructure/repositories/userRepository"
 import { TempUserRepository } from "../infrastructure/repositories/tempUserRepository"
 
 import { UpcomingUseCase } from "../useCases/upcomingUseCase"
 import { MovieUseCase } from "../useCases/movieUseCase"
+import { ShowSeatUseCase } from "../useCases/showSeatUseCase"
 import { ShowUseCase } from "../useCases/showUseCase"
 import { AdminUseCase } from "../useCases/adminUseCase"
 import { ScreenSeatUseCase } from "../useCases/screenSeatUseCase"
@@ -49,7 +51,7 @@ const screenSeatRepositoty = new ScreenSeatRepository()
 const upcRepositoty = new UpcomingRepository()
 const movieRepositoty = new MovieRepository()
 const showRepositoty = new ShowRepository()
-const showSeatsRepositoty = new ShowSeatsRepository()
+const showSeatRepositoty = new ShowSeatRepository()
 
 const adminUseCase = new AdminUseCase(encrypt, adminRepository, jwtToken)
 const userUseCase = new UserUseCase(userRepository, tempUserRepository, encrypt, jwtToken, mailSender)
@@ -58,7 +60,9 @@ const scnUseCase = new ScreenUseCase(scnRepositoty, screenSeatRepositoty, thrRep
 const screenSeatUseCase = new ScreenSeatUseCase(screenSeatRepositoty, scnRepositoty)
 const upcUseCase = new UpcomingUseCase(upcRepositoty)
 const movieUseCase = new MovieUseCase(movieRepositoty)
-const showUseCase = new ShowUseCase(showRepositoty,showSeatsRepositoty,movieRepositoty,scnRepositoty,screenSeatRepositoty,thrRepository)
+const showUseCase = new ShowUseCase(showRepositoty,showSeatRepositoty,movieRepositoty,scnRepositoty,screenSeatRepositoty,thrRepository)
+const showSeatUseCase = new ShowSeatUseCase(showSeatRepositoty)
+
 
 export const uController = new UserController(userUseCase, otpGenerator, encrypt )
 export const aController = new AdminController(adminUseCase, userUseCase, thrUseCase)
@@ -68,3 +72,4 @@ export const screenSeatController = new ScreenSeatController(screenSeatUseCase)
 export const upcController = new UpcomingController(upcUseCase)
 export const mController = new MovieController(movieUseCase)
 export const showController = new ShowController(showUseCase)
+export const showSeatController = new ShowSeatController(showSeatUseCase)

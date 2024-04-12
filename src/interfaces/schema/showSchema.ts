@@ -22,6 +22,12 @@ export interface IShow {
 
 export interface IShowToSave extends Omit<IShow, '_id'> {}
 
+export interface IEditShow extends IShow {
+    diamond?: number;
+    gold?: number;
+    silver?: number;
+}
+
 export interface IShowRequirements extends Omit<IShow, '_id' | 'totalSeatCount' | 'availableSeatCount' | 'seatId'> {
     diamondPrice: number
     goldPrice?: number

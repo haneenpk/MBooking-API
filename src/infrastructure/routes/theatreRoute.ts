@@ -29,5 +29,8 @@ thrRouter.get('/movie/get/:movieId', theaterAuth, (req, res) => mController.find
 thrRouter.get('/shows/:theaterId', theaterAuth, (req, res) => showController.findShowsOnTheater(req, res))
 thrRouter.get('/shows/first/:theaterId', theaterAuth, (req, res) => showController.findFirstShowsOnTheater(req, res))
 thrRouter.post('/show/add/:theaterId', theaterAuth, (req, res) => showController.addShow(req, res))
+thrRouter.get('/show/edit/:showId', theaterAuth, (req, res) => showController.editShowGet(req, res))
+thrRouter.post('/show/edit/:showId', theaterAuth, (req, res) => showController.editShow(req, res))
+thrRouter.delete('/show/delete/:showId', theaterAuth, (req,res) => showController.deleteShow(req,res))
 
 export default thrRouter

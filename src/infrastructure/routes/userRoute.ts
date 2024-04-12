@@ -1,6 +1,6 @@
 import express from "express";
 import { userAuth } from "../middleware/userAuth";
-import { uController, upcController, showController, mController, tController } from "../../providers/controllers";
+import { uController, upcController, showController, mController, tController, showSeatController } from "../../providers/controllers";
 import upload from "../config/multer"; // Adjust import statement here
 
 const userRouter = express.Router()
@@ -25,5 +25,7 @@ userRouter.get('/movies', userAuth, (req, res) => showController.getMovies(req,r
 userRouter.get('/movie/get/:movieId', userAuth, (req, res) => mController.findMovieById(req,res))
 
 userRouter.get('/showTime', userAuth, (req, res) => showController.getShows(req,res))
+userRouter.get('/selectShowTime', userAuth, (req, res) => showController.getSelectShows(req,res))
+userRouter.get('/show/seat/:seatId', userAuth, (req, res) => showSeatController.findShowSeatById(req,res))
 
 export default userRouter

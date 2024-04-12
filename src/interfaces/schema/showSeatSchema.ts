@@ -1,4 +1,4 @@
-import { ColType, RowType } from "../common"
+import { ColType, IApiRes, RowType } from "../common"
 
 export interface IShowSingleSeat {
     col: ColType
@@ -17,6 +17,9 @@ export interface IShowSeats {
     gold: IShowSeatCategory
     silver: IShowSeatCategory
 }
+
+export interface IShowSeatRes extends IShowSeats {}
+export interface IApiShowSeatRes extends IApiRes<IShowSeatRes | null> {}
 
 export interface IShowSeatCategoryRes extends IShowSeatCategory {
     // seats: Partial<Record<string, IShowSingleSeat[]>>
