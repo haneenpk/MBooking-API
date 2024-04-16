@@ -6,6 +6,7 @@ import { IAllUpcoming, IUpcomingRes } from "./schema/upcomingSchema";
 import { ITempTheaterRes } from "./schema/tempTheaterSchema";
 import { IScreen } from "./schema/screenSchema";
 import { IShow } from "./schema/showSchema";
+import { IChatRes, IUsersListForChats } from "./schema/chatSchema";
 import { IShowSeatsRes } from "./schema/showSeatSchema";
 import { ISubscription } from "./schema/subscriptionSchema";
 import { IAvailCatsOnScreen, IScreenSeat } from "./schema/screenSeatSchema";
@@ -34,7 +35,7 @@ export interface ICoords {
 export type AllResTypes = ITheaterRes | ITheaterRes[] | ITempTheaterRes | IAvailCatsOnScreen |
             IUserRes | IUserRes[] | IAllUsers | IScreen | IScreen[] | IScreenSeat | ITheatersAndCount | null | IShow |
             ISubscription | ISubscription[] | IUpcomingRes | IUpcomingRes[] | IAllUpcoming | IAdminRes | IApiAdminRes |
-            IShowSeatsRes 
+            IShowSeatsRes | IChatRes | IUsersListForChats[]
 
 export interface IApiRes<T extends AllResTypes> {
     status: number;

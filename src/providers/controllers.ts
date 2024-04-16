@@ -7,6 +7,7 @@ import { UpcomingController } from "../adapters/controllers/upcomingController"
 import { MovieController } from "../adapters/controllers/MovieController"
 import { ShowController } from "../adapters/controllers/showController"
 import { ShowSeatController } from "../adapters/controllers/showSeatController"
+import { ChatController } from "../adapters/controllers/chatController"
 
 import { AdminRepository } from "../infrastructure/repositories/adminRepository"
 import { ScreenRepository } from "../infrastructure/repositories/screenRepository"
@@ -19,6 +20,7 @@ import { ShowRepository } from "../infrastructure/repositories/showRepository"
 import { ShowSeatRepository } from "../infrastructure/repositories/showSeatRepository"
 import { UserRepository } from "../infrastructure/repositories/userRepository"
 import { TempUserRepository } from "../infrastructure/repositories/tempUserRepository"
+import { ChatRepository } from "../infrastructure/repositories/chatRepository"
 
 import { UpcomingUseCase } from "../useCases/upcomingUseCase"
 import { MovieUseCase } from "../useCases/movieUseCase"
@@ -29,6 +31,7 @@ import { ScreenSeatUseCase } from "../useCases/screenSeatUseCase"
 import { ScreenUseCase } from "../useCases/screenUseCase"
 import { TheaterUseCase } from "../useCases/theaterUseCase"
 import { UserUseCase } from "../useCases/userUseCase"
+import { ChatUseCase } from "../useCases/chatUseCase"
 
 import { Encrypt } from "./bcryptPassword"
 import { JWTToken } from "./jwtToken"
@@ -52,6 +55,7 @@ const upcRepositoty = new UpcomingRepository()
 const movieRepositoty = new MovieRepository()
 const showRepositoty = new ShowRepository()
 const showSeatRepositoty = new ShowSeatRepository()
+const chatRepository = new ChatRepository()
 
 const adminUseCase = new AdminUseCase(encrypt, adminRepository, jwtToken)
 const userUseCase = new UserUseCase(userRepository, tempUserRepository, encrypt, jwtToken, mailSender)
@@ -62,6 +66,7 @@ const upcUseCase = new UpcomingUseCase(upcRepositoty)
 const movieUseCase = new MovieUseCase(movieRepositoty)
 const showUseCase = new ShowUseCase(showRepositoty,showSeatRepositoty,movieRepositoty,scnRepositoty,screenSeatRepositoty,thrRepository)
 const showSeatUseCase = new ShowSeatUseCase(showSeatRepositoty)
+export const chatUseCase = new ChatUseCase(chatRepository)
 
 
 export const uController = new UserController(userUseCase, otpGenerator, encrypt )
@@ -73,3 +78,4 @@ export const upcController = new UpcomingController(upcUseCase)
 export const mController = new MovieController(movieUseCase)
 export const showController = new ShowController(showUseCase)
 export const showSeatController = new ShowSeatController(showSeatUseCase)
+export const chatController = new ChatController(chatUseCase)
