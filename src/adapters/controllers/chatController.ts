@@ -8,8 +8,10 @@ export class ChatController {
     ) { }
 
     async getChatHistory (req: Request, res: Response) {
-        const { userId, theaterId, adminId } = req.query as unknown as IChatReqs
-        const apiRes = await this.chatUseCase.getChatHistory(userId, theaterId, adminId)
+        const { userId, theaterId } = req.query as unknown as IChatReqs
+        console.log(req.query);
+        
+        const apiRes = await this.chatUseCase.getChatHistory(userId, theaterId)
         res.status(apiRes.status).json(apiRes)
     }
 
@@ -25,10 +27,4 @@ export class ChatController {
         res.status(apiRes.status).json(apiRes)
     }
 
-    async markLastMsgAsRead (req: Request, res: Response) {
-        const { userId, theaterId, adminId, msgId } = req.query as unknown as IChatReadReqs
-        const msgData: IChatReadReqs = { userId, theaterId, adminId, msgId }
-        const apiRes = await this.chatUseCase.markLastMsgAsRead(msgData)
-        res.status(apiRes.status).json(apiRes)
-    }
 }

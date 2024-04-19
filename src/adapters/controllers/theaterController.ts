@@ -61,4 +61,9 @@ export class TheaterController {
         res.status(apiRes.status).json(apiRes)
     }
 
+    async getAllTheater(req: Request, res: Response) {
+        const apiRes = await this.theaterUseCase.getAllTheater()
+        res.status(apiRes.status).json(apiRes)
+    }
+
 }

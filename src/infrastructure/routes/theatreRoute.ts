@@ -1,6 +1,6 @@
 import express from "express";
 import { theaterAuth } from "../middleware/theaterAuth";
-import { tController, scnController, screenSeatController, mController, showController } from "../../providers/controllers";
+import { tController, scnController, screenSeatController, mController, showController, chatController } from "../../providers/controllers";
 
 const thrRouter = express.Router()
 
@@ -32,5 +32,8 @@ thrRouter.post('/show/add/:theaterId', theaterAuth, (req, res) => showController
 thrRouter.get('/show/edit/:showId', theaterAuth, (req, res) => showController.editShowGet(req, res))
 thrRouter.post('/show/edit/:showId', theaterAuth, (req, res) => showController.editShow(req, res))
 thrRouter.delete('/show/delete/:showId', theaterAuth, (req,res) => showController.deleteShow(req,res))
+
+thrRouter.get('/chat/users/:theaterId', theaterAuth, (req, res) => chatController.getUsersChattedWith(req, res))
+thrRouter.get('/chat/history', theaterAuth, (req, res) => chatController.getChatHistory(req, res))
 
 export default thrRouter

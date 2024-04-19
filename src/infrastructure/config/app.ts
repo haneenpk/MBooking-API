@@ -24,6 +24,8 @@ export const createServer = () => {
             credentials: true,
             origin: process.env.CORS_URI
         }))
+        console.log("hhh");
+        
         
         app.use('/api/admin', adminRouter)
         app.use('/api/theater', theatreRouter)

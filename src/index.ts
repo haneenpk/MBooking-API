@@ -30,23 +30,29 @@ mongoConnect()
             io.on('connection', (socket: Socket) => {
                 const id = socket.handshake.query.id as string
 
+                socket.on("msgg",(msg) => {
+                    console.log('msggg: ',msg);
+                    
+                })
+
                 userSockets.set(id, socket.id);
 
                 socket.on('send-message', async (chatData: IChatReqs) => {
+                    console.log('send-message: ',chatData);
                     let recipientId: string;
                     // let senderId: ID;
                     if (chatData.sender === 'User') {
-                        recipientId = chatData.theaterId ?? chatData.adminId as string
+                        recipientId = chatData.theaterId as string
                         // senderId = chatData.userId as ID
-                    } else if (chatData.sender === 'Theater') {
-                        recipientId = chatData.userId ?? chatData.adminId as string
-                        // senderId = chatData.theaterId as ID
                     } else {
-                        recipientId = chatData.theaterId ?? chatData.userId as string
+                        recipientId = chatData.userId as string
+                        // senderId = chatData.theaterId as ID
                     }
 
                     const savedData = await chatUseCase.sendMessage(chatData)
-                    socket.to(userSockets.get(recipientId) as string).emit('recieve-message', savedData);
+                    console.log(savedData);
+                    
+                    socket.broadcast.emit('recieve-message', savedData);
                     // socket.to(userSockets.get(senderId as unknown as string) as string).emit('recieve-message', savedData);
                 });
 

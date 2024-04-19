@@ -200,4 +200,14 @@ export class TheaterUseCase {
         }
     }
 
+    async getAllTheater() {
+        try {
+            const theaters = await this.theaterRepository.findTheaters()
+            if (theaters === null) return getErrorResponse(STATUS_CODES.BAD_REQUEST)
+            return get200Response(theaters)
+        } catch (error) {
+            return get500Response(error as Error)
+        }
+    }
+
 }

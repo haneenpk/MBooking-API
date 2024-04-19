@@ -1,5 +1,5 @@
 import { chatModel } from "../../entities/models/chatModel";
-import { IChatReadReqs, IChatReqs, IChatRes, IUsersListForChats } from "../../interfaces/schema/chatSchema";
+import { IChatReqs, IChatRes, IUsersListForChats } from "../../interfaces/schema/chatSchema";
 import { ITheaterRes } from "../../interfaces/schema/theaterSchema";
 import { IUserRes } from "../../interfaces/schema/userSchema";
 import { IChatRepo } from "../../interfaces/repos/chatRepo";
@@ -11,7 +11,6 @@ export class ChatRepository implements IChatRepo {
             { 
                 userId: chatReqs.userId,
                 theaterId: chatReqs.theaterId,
-                adminId: chatReqs.adminId
             },
             {
                 $push: {
@@ -28,9 +27,9 @@ export class ChatRepository implements IChatRepo {
         )
     }
 
-    async getChatHistory (userId: string | undefined, theaterId: string | undefined, adminId: string | undefined): Promise<IChatRes | null>{
+    async getChatHistory (userId: string | undefined, theaterId: string | undefined): Promise<IChatRes | null>{
         return await chatModel.findOneAndUpdate(
-            { userId, theaterId, adminId },
+            { userId, theaterId },
             { $set: { "messages.$[].isRead": true } },  // Update isRead for all elements in the messages array
             { new: true }
         )
@@ -45,22 +44,11 @@ export class ChatRepository implements IChatRepo {
     async getUsersChattedWith (theaterId: string): Promise<IUsersListForChats[]> {
         const allChats = await chatModel.find({ theaterId }).populate('userId')
         const users: IUsersListForChats[] = allChats.map(chat => {
-            const unreadCount = chat.messages.filter((msg: any) => msg.sender === 'User' && msg.isRead === false).length;
             const { _id, username, profilePic } = chat.userId as unknown as IUserRes;
-            return { _id: _id.toString(), username, profilePic, unreadCount };
+            return { _id: _id.toString(), username, profilePic };
         })
+        
         return users;
     }
 
-    async markLastMsgAsRead (msgData: IChatReadReqs): Promise<undefined> {
-        const { userId, theaterId, adminId, msgId } = msgData
-        await chatModel.findOneAndUpdate(
-            { userId, theaterId, adminId, 'messages._id': msgId },
-            {
-              $set: {
-                'messages.$.isRead': true,
-              },
-            }
-        );
-    }
 }

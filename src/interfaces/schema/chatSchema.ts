@@ -10,7 +10,6 @@ export interface IChatMessage {
 export interface IChatHistory {
     userId?: string; // User _id
     theaterId?: string; // Theater _id
-    adminId?: string; // Admin _id
     messages: Array<IChatMessage>;
 }
 
@@ -22,12 +21,10 @@ export interface IUsersListForChats {
     _id: string
     username: string
     profilePic?: string
-    unreadCount: number
 }
 
 export interface IChatReadReqs { 
     userId: string | undefined,
     theaterId: string | undefined,
-    adminId: string | undefined,
     msgId: string
 }

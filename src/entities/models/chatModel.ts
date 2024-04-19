@@ -7,7 +7,7 @@ export const chatSchema: Schema = new Schema<IChatHistory & Document>({
         ref: 'Users',
         // required: true
         validate: function (this: IChatHistory) {
-            return validateParticipants(this.userId, this.theaterId, this.adminId)
+            return validateParticipants(this.userId, this.theaterId)
         },
     },
     theaterId: {
@@ -15,20 +15,13 @@ export const chatSchema: Schema = new Schema<IChatHistory & Document>({
         ref: 'Theaters',
         // required: true
         validate: function (this: IChatHistory) {
-            return validateParticipants(this.userId, this.theaterId, this.adminId)
-        },
-    },
-    adminId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Admin',
-        validate: function (this: IChatHistory) {
-            return validateParticipants(this.userId, this.theaterId, this.adminId)
+            return validateParticipants(this.userId, this.theaterId)
         },
     },
     messages: [{
         sender: {
             type: String,
-            enum: ['User', 'Theater', 'Admin'],
+            enum: ['User', 'Theater'],
             required: true
         },
         message: {
@@ -52,11 +45,11 @@ export const chatSchema: Schema = new Schema<IChatHistory & Document>({
 })
 
 // Compound index to ensure uniqueness of userId, theaterId, and adminId
-chatSchema.index({ userId: 1, theaterId: 1, adminId: 1 }, { unique: true });
+chatSchema.index({ userId: 1, theaterId: 1 }, { unique: true });
 
 // Custom validation function
-function validateParticipants(userId: string | undefined, theaterId: string | undefined, adminId: string | undefined) {
-    const fieldsCount = [userId, theaterId, adminId].filter(Boolean).length;
+function validateParticipants(userId: string | undefined, theaterId: string | undefined) {
+    const fieldsCount = [userId, theaterId].filter(Boolean).length;
     // console.log('validating, count == 2', fieldsCount);
     
     return fieldsCount === 2;

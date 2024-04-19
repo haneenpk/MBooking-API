@@ -28,6 +28,7 @@ userRouter.get('/showTime', userAuth, (req, res) => showController.getShows(req,
 userRouter.get('/selectShowTime', userAuth, (req, res) => showController.getSelectShows(req,res))
 userRouter.get('/show/seat/:seatId', userAuth, (req, res) => showSeatController.findShowSeatById(req,res))
 
+userRouter.get('/all/theaters', userAuth,  (req,res) => tController.getAllTheater(req,res))
 userRouter.get('/chat/theaters/:userId', userAuth, (req, res) => chatController.getTheatersChattedWith(req, res))
 userRouter.get('/chat/history', userAuth, (req, res) => chatController.getChatHistory(req, res))
 
