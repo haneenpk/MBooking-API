@@ -23,9 +23,11 @@ export class ChatUseCase {
         }
     }
 
-    async getChatHistory(userId: string | undefined, theaterId: string | undefined): Promise<IApiChatRes> {
+    async getChatHistory(userId: string | undefined, theaterId: string | undefined, role: string | undefined): Promise<IApiChatRes> {
         try {
             console.log(userId, theaterId, 'ids from getHistory use case');
+
+            const updated = await this.chatRepository.getChatHistoryUpdate(userId, theaterId, role)
 
             const chats = await this.chatRepository.getChatHistory(userId, theaterId)
             return get200Response(chats as IChatRes) // handle it from front end

@@ -12,5 +12,10 @@ export const showSingleSeatSchema: Schema = new Schema<IShowSingleSeat & Documen
         type: Boolean,
         default: false,
         required: [true, 'Specify availability of the seat']
+    },
+    isTempBooked: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 })

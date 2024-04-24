@@ -8,11 +8,11 @@ export class ChatController {
     ) { }
 
     async getChatHistory (req: Request, res: Response) {
-        const { userId, theaterId } = req.query as unknown as IChatReqs
+        const { userId, theaterId, role } = req.query as { userId: string, theaterId: string, role: string };
         console.log(req.query);
         
-        const apiRes = await this.chatUseCase.getChatHistory(userId, theaterId)
-        res.status(apiRes.status).json(apiRes)
+        const apiRes = await this.chatUseCase.getChatHistory(userId, theaterId, role);
+        res.status(apiRes.status).json(apiRes);
     }
 
     async getTheatersChattedWith (req: Request, res: Response) {

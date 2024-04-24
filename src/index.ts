@@ -50,7 +50,6 @@ mongoConnect()
                     }
 
                     const savedData = await chatUseCase.sendMessage(chatData)
-                    console.log(savedData);
                     
                     socket.broadcast.emit('recieve-message', savedData);
                     // socket.to(userSockets.get(senderId as unknown as string) as string).emit('recieve-message', savedData);

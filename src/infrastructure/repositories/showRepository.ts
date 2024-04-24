@@ -1,10 +1,10 @@
-import { IMovieRepo } from "../../interfaces/repos/movieRepo";
+import { IShowRepo } from "../../interfaces/repos/showRepo";
 import { IShow, IShowRes, IShowToSave } from "../../interfaces/schema/showSchema";
 import { showModel } from "../../entities/models/showModel";
 import { ID } from "../../interfaces/common";
 import { ObjectId } from 'mongodb'; // Import ObjectId from MongoDB library
 
-export class ShowRepository implements IMovieRepo {
+export class ShowRepository implements IShowRepo {
 
   async findShowById(id: ID): Promise<IShow | null> {
     return await showModel.findById({ _id: id })

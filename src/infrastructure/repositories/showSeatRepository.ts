@@ -19,4 +19,8 @@ export class ShowSeatRepository { // implements IChatRepo
         return await showSeatsModel.findById(showSeatId)
     }
 
+    async udateShowSeatById(showSeatId: ID, showSeat: any) {
+        return await showSeatsModel.updateOne({ _id: showSeatId }, { $set: showSeat });
+    }
+
 }

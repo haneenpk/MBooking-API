@@ -3,6 +3,7 @@ import { ColType, IApiRes, RowType } from "../common"
 export interface IShowSingleSeat {
     col: ColType
     isBooked: boolean
+    isTempBooked: boolean
 }
 
 export interface IShowSeatCategory {

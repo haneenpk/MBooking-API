@@ -10,11 +10,12 @@ import { IChatRes, IUsersListForChats } from "./schema/chatSchema";
 import { IShowSeatsRes } from "./schema/showSeatSchema";
 import { ISubscription } from "./schema/subscriptionSchema";
 import { IAvailCatsOnScreen, IScreenSeat } from "./schema/screenSeatSchema";
+import { ITempTicketRes, ITicketRes, Seats } from "./schema/ticketSchema";
 
 export type Location = [number, number];
 
 export type ID = Schema.Types.ObjectId
-export type PaymentMethod = 'Razorpay' | 'Wallet'
+export type PaymentMethod = 'Stripe' | 'Wallet'
 
 export interface IUserAddress {
     country: string
@@ -35,7 +36,8 @@ export interface ICoords {
 export type AllResTypes = ITheaterRes | ITheaterRes[] | ITempTheaterRes | IAvailCatsOnScreen |
             IUserRes | IUserRes[] | IAllUsers | IScreen | IScreen[] | IScreenSeat | ITheatersAndCount | null | IShow |
             ISubscription | ISubscription[] | IUpcomingRes | IUpcomingRes[] | IAllUpcoming | IAdminRes | IApiAdminRes |
-            IShowSeatsRes | IChatRes | IUsersListForChats[]
+            IShowSeatsRes | IChatRes | IUsersListForChats[] | ITempTicketRes | ITempTicketRes[] | ITicketRes | ITicketRes[] |
+            Seats 
 
 export interface IApiRes<T extends AllResTypes> {
     status: number;

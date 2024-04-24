@@ -7,7 +7,7 @@ export function getShowSeatCategory (screenCat: IScreenSeatCategory, price: numb
     if (screenCat.seats.size === 0) return undefined
     const showSeatMap: Map<RowType, IShowSingleSeat[]> = new Map()
     for (const [rowName, row] of screenCat.seats) { 
-        const showSeatRow: IShowSingleSeat[] = row.map(x => ({ col: x, isBooked: false }))
+        const showSeatRow: IShowSingleSeat[] = row.map(x => ({ col: x, isBooked: false, isTempBooked: false }))
         showSeatMap.set(rowName as RowType, showSeatRow)
     }
 

@@ -16,7 +16,8 @@ export class ChatRepository implements IChatRepo {
                 $push: {
                     messages: {
                         sender: chatReqs.sender,
-                        message: chatReqs.message
+                        message: chatReqs.message,
+                        isRead: false
                     }
                 }
             },
@@ -28,11 +29,17 @@ export class ChatRepository implements IChatRepo {
     }
 
     async getChatHistory (userId: string | undefined, theaterId: string | undefined): Promise<IChatRes | null>{
-        return await chatModel.findOneAndUpdate(
-            { userId, theaterId },
-            { $set: { "messages.$[].isRead": true } },  // Update isRead for all elements in the messages array
-            { new: true }
+        return await chatModel.findOne(
+            { userId, theaterId }
         )
+    }
+
+    async getChatHistoryUpdate(userId: string | undefined, theaterId: string | undefined, role: string | undefined): Promise<IChatRes | null> {
+        return await chatModel.findOneAndUpdate(
+            { userId, theaterId, "messages.sender": role },
+            { $set: { "messages.$[].isRead": true } },  
+            { new: true }
+        );
     }
 
     async getTheatersChattedWith (userId: string): Promise<ITheaterRes[]> {

@@ -1,6 +1,6 @@
 import express from "express";
 import { userAuth } from "../middleware/userAuth";
-import { uController, upcController, showController, mController, tController, showSeatController, chatController } from "../../providers/controllers";
+import { uController, upcController, showController, mController, tController, showSeatController, chatController, ticketController } from "../../providers/controllers";
 import upload from "../config/multer"; // Adjust import statement here
 
 const userRouter = express.Router()
@@ -31,5 +31,12 @@ userRouter.get('/show/seat/:seatId', userAuth, (req, res) => showSeatController.
 userRouter.get('/all/theaters', userAuth,  (req,res) => tController.getAllTheater(req,res))
 userRouter.get('/chat/theaters/:userId', userAuth, (req, res) => chatController.getTheatersChattedWith(req, res))
 userRouter.get('/chat/history', userAuth, (req, res) => chatController.getChatHistory(req, res))
+
+userRouter.post('/show/booking/hold', userAuth, (req, res) => ticketController.holdSeats(req, res))
+userRouter.get('/show/tempTicket/:tempTicketId', userAuth, (req, res) => ticketController.getTempTicket(req, res))
+
+userRouter.post('/booking/ticket/:tempTicketId', userAuth, (req, res) => ticketController.confirmTicket(req, res))
+userRouter.get('/booking/save/:tempTicketId', userAuth, (req, res) => ticketController.saveTicket(req, res))
+userRouter.get('/booking-history/:userId', userAuth, (req, res) => ticketController.userTicketHistory(req, res))
 
 export default userRouter
