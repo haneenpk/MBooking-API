@@ -75,7 +75,6 @@ const showSeatUseCase = new ShowSeatUseCase(showSeatRepositoty)
 export const chatUseCase = new ChatUseCase(chatRepository)
 const ticketUseCase = new TicketUseCase(ticketRepository, tempTicketRepository, showRepositoty, showSeatRepositoty, userRepository)
 
-
 export const uController = new UserController(userUseCase, otpGenerator, encrypt )
 export const aController = new AdminController(adminUseCase, userUseCase, thrUseCase)
 export const tController = new TheaterController(thrUseCase)

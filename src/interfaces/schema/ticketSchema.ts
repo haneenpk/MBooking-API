@@ -18,6 +18,8 @@ export interface ITicket {
     goldSeats: ITicketSeat
     silverSeats: ITicketSeat
     totalPrice: number
+    total: number
+    adminShare: number
     seatCount: number
     startTime: Date
     isCancelled: boolean

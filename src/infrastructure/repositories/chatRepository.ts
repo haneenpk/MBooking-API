@@ -36,8 +36,14 @@ export class ChatRepository implements IChatRepo {
 
     async getChatHistoryUpdate(userId: string | undefined, theaterId: string | undefined, role: string | undefined): Promise<IChatRes | null> {
         return await chatModel.findOneAndUpdate(
-            { userId, theaterId, "messages.sender": role },
-            { $set: { "messages.$[].isRead": true } },  
+            { 
+                $and: [
+                    { userId: userId },
+                    { theaterId: theaterId },
+                    { "messages.sender": role },
+                  ]
+            },
+            { $set: { "messages.$[].isRead": true } },
             { new: true }
         );
     }

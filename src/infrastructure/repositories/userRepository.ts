@@ -14,6 +14,10 @@ export class UserRepository implements IUserRepo {
         return await userModel.findById({_id: id})
     }
 
+    async findByIdNS(id: ID): Promise< IUser | null > {
+        return await userModel.findById({_id: id})
+    }
+
     async findByEmail(email: string): Promise< IUser | null > {
         return await userModel.findOne({ email })
     }
@@ -74,6 +78,18 @@ export class UserRepository implements IUserRepo {
                 $unset: {
                     profilePic: ''
                 }
+            },
+            { new: true }
+        )
+    }
+
+    async updateWallet (userId: ID, amount: number, message: string): Promise<IUserRes | null> {
+        console.log(userId, 'userID from update wallet of user')
+        return await userModel.findByIdAndUpdate(
+            { _id: userId },
+            {
+                $inc: { wallet: amount },
+                $push: { walletHistory: { amount , message} }
             },
             { new: true }
         )

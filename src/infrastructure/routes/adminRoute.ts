@@ -1,6 +1,6 @@
 import express from "express";
 import { adminAuth } from "../middleware/adminAuth";
-import { aController, upcController, scnController, screenSeatController, mController } from "../../providers/controllers";
+import { aController, upcController, scnController, screenSeatController, mController, ticketController } from "../../providers/controllers";
 import upload from "../config/multer";
 
 const adminRouter = express.Router()
@@ -33,6 +33,8 @@ adminRouter.get('/movies', adminAuth, (req, res) => mController.getMovies(req,re
 adminRouter.get('/movie/get/:movieId', adminAuth, (req, res) => mController.findMovieById(req,res))
 adminRouter.put('/movie/edit/:movieId', adminAuth, (req, res) => mController.updateMovies(req,res))
 adminRouter.patch('/movie/edit/image/:movieId', upload.single('image'), adminAuth, (req, res) => mController.updateImage(req,res))
+
+adminRouter.get('/tickets', adminAuth, (req, res) => ticketController.getAllTickets(req,res))
 
 
 export default adminRouter

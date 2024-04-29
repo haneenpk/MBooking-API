@@ -38,5 +38,6 @@ userRouter.get('/show/tempTicket/:tempTicketId', userAuth, (req, res) => ticketC
 userRouter.post('/booking/ticket/:tempTicketId', userAuth, (req, res) => ticketController.confirmTicket(req, res))
 userRouter.get('/booking/save/:tempTicketId', userAuth, (req, res) => ticketController.saveTicket(req, res))
 userRouter.get('/booking-history/:userId', userAuth, (req, res) => ticketController.userTicketHistory(req, res))
+userRouter.get('/ticket/cancel/:ticketId', userAuth, (req, res) => ticketController.cancelTicket(req, res))
 
 export default userRouter

@@ -12,6 +12,7 @@ export interface IUser {
     mobile: number
     isBlocked?: boolean
     profilePic?: string
+    wallet?: number
 }
 
 // interface to respond to front end

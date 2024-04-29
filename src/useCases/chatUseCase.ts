@@ -29,6 +29,9 @@ export class ChatUseCase {
 
             const updated = await this.chatRepository.getChatHistoryUpdate(userId, theaterId, role)
 
+            console.log(updated);
+            
+
             const chats = await this.chatRepository.getChatHistory(userId, theaterId)
             return get200Response(chats as IChatRes) // handle it from front end
 

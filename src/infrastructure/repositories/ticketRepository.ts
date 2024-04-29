@@ -22,9 +22,13 @@ export class TicketRepository implements ITicketRepo {
         .populate('showId').populate('screenId').populate('theaterId')
     }
 
-    async getTicketsByTheaterId (theaterId: string, page: number, limit: number): Promise<ITicketRes[]> {
-        return await ticketModel.find({ theaterId }).skip((page -1) * limit)
-        .limit(limit).sort({ createdAt: -1 }).populate('movieId')
+    async getTicketsAll (): Promise<ITicketRes[]> {
+        return await ticketModel.find().sort({ createdAt: -1 }).populate('movieId')
+        .populate('showId').populate('screenId').populate('theaterId').populate('userId')
+    }
+
+    async getTicketsByTheaterId (theaterId: string): Promise<ITicketRes[]> {
+        return await ticketModel.find({ theaterId }).sort({ createdAt: -1 }).populate('movieId')
         .populate('showId').populate('screenId').populate('theaterId').populate('userId')
     }
 
@@ -73,13 +77,12 @@ export class TicketRepository implements ITicketRepo {
         return await ticketModel.countDocuments({}).exec();
     }
 
-    async cancelTicket (ticketId: string, cancelledBy: 'User' | 'Theater' | 'Admin'): Promise<ITicketRes | null> {
+    async cancelTicket (ticketId: string): Promise<ITicketRes | null> {
         return await ticketModel.findByIdAndUpdate(
             { _id: ticketId },
             {
                 $set:{
                     isCancelled: true,
-                    cancelledBy
                 }
             }
         )

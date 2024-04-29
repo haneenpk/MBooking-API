@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import { IUser } from "../../interfaces/schema/userSchema"; 
 import { emailSchema } from "./base/emailSchema";
 import { mobileSchema } from "./base/mobileSchema";
+import { walletSchema } from "./base/walletSchema";
 
 const userSchema: Schema = new Schema<IUser & Document>({
     username: {
@@ -34,6 +35,7 @@ const userSchema: Schema = new Schema<IUser & Document>({
 
 userSchema.add(emailSchema)
 userSchema.add(mobileSchema)
+userSchema.add(walletSchema)
 
 const userModel: Model< IUser & Document > = mongoose.model< IUser & Document >('Users', userSchema);
 

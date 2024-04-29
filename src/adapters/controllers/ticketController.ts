@@ -22,7 +22,8 @@ export class TicketController {
 
     async confirmTicket (req: Request, res: Response) {
         const tempTicketId = req.params.tempTicketId as unknown as ID
-        const apiRes = await this.ticketUseCase.confirmTicket(tempTicketId)
+        const payment = req.query.payment as unknown as string
+        const apiRes = await this.ticketUseCase.confirmTicket(tempTicketId, payment)
         res.status(apiRes.status).json(apiRes)
     }
 
@@ -35,6 +36,23 @@ export class TicketController {
     async userTicketHistory (req: Request, res: Response) {
         const userId = req.params.userId as unknown as string
         const apiRes = await this.ticketUseCase.userTicketHistory(userId)
+        res.status(apiRes.status).json(apiRes)
+    }
+
+    async cancelTicket (req: Request, res: Response) {
+        const ticketId = req.params.ticketId as unknown as string
+        const apiRes = await this.ticketUseCase.cancelTicket(ticketId)
+        res.status(apiRes.status).json(apiRes)
+    }
+
+    async getTicketsTheaters (req: Request, res: Response) {
+        const theaterId = req.params.theaterId as unknown as string
+        const apiRes = await this.ticketUseCase.getTicketsTheaters(theaterId)
+        res.status(apiRes.status).json(apiRes)
+    }
+
+    async getAllTickets (req: Request, res: Response) {
+        const apiRes = await this.ticketUseCase.getAllTickets()
         res.status(apiRes.status).json(apiRes)
     }
 

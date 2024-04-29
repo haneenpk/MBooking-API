@@ -39,6 +39,14 @@ export const ticketSchema: Schema = new Schema<ITicket & Document>({
         type: Number,
         required: true
     },
+    total: {
+        type: Number,
+        required: true
+    },
+    adminShare: {
+        type: Number,
+        required: true
+    },
     seatCount: {
         type: Number,
         required: true
@@ -55,8 +63,8 @@ export const ticketSchema: Schema = new Schema<ITicket & Document>({
         required: true
     }
 },
-{
-    timestamps: true
-})
+    {
+        timestamps: true
+    })
 
 export const ticketModel: Model<ITicket & Document> = mongoose.model<ITicket & Document>('Tickets', ticketSchema)

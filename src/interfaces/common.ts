@@ -23,6 +23,11 @@ export interface IUserAddress {
     district: string
     city: string
 }
+export interface IWalletHistory {
+    amount: number
+    message: string
+    date: Date
+}
 
 export interface ITheaterAddress extends IUserAddress {
     landmark?: string
