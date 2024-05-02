@@ -25,24 +25,32 @@ export class ChatUseCase {
 
     async getChatHistory(userId: string | undefined, theaterId: string | undefined, role: string | undefined): Promise<IApiChatRes> {
         try {
-            console.log(userId, theaterId, 'ids from getHistory use case');
-
-            const updated = await this.chatRepository.getChatHistoryUpdate(userId, theaterId, role)
-
-            console.log(updated);
-            
-
-            const chats = await this.chatRepository.getChatHistory(userId, theaterId)
-            return get200Response(chats as IChatRes) // handle it from front end
-
+    
+            const chats = await this.chatRepository.getChatHistory(userId, theaterId);
+    
+            if (chats && chats.messages !== undefined) { // Check if chats is not null or undefined
+                for (let i = 0; i < chats.messages.length; i++) {
+                    if (chats.messages[i].sender === role) {
+                        console.log("send: ", chats.messages[i].sender === role);
+                        chats.messages[i].isRead = true;
+                    }
+                }
+            }
+    
+            const updated = await this.chatRepository.getChatHistoryUpdate(userId, theaterId, chats?.messages);
+    
+            return get200Response(updated as IChatRes); // handle it from front end
+    
         } catch (error) {
-            return get500Response(error as Error)
+            return get500Response(error as Error);
         }
     }
 
     async getTheatersChattedWith(userId: string): Promise<IApiTheatersRes> {
         try {
             const users = await this.chatRepository.getTheatersChattedWith(userId)
+            console.log(users);
+            
             return get200Response(users)
         } catch (error) {
             return get500Response(error as Error)

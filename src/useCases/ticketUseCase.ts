@@ -119,13 +119,22 @@ export class TicketUseCase {
             // Set a timer to expire after 10 minutes
             setTimeout(async () => {
                 console.log("8 sec");
+                const showSeatNew = await this.showSeatRepository.findShowSeatById(seatId);
+
+                if (!showSeatNew) {
+                    return {
+                        status: STATUS_CODES.UNAUTHORIZED,
+                        message: 'One or more required resources not found',
+                        data: null,
+                    }
+                }
 
                 for (let i = 0; i < selectedSeat.length; i++) {
                     let row = selectedSeat[i].seatNumber.slice(0, 1);
                     let seatNum = selectedSeat[i].seatNumber.slice(1);
 
                     if (selectedSeat[i].category === "diamond") {
-                        const seatsInRow = showSeat.diamond.seats.get(row);
+                        const seatsInRow = showSeatNew.diamond.seats.get(row);
                         if (seatsInRow) {
                             for (let j = 0; j < seatsInRow.length; j++) {
                                 const seat = seatsInRow[j];
@@ -136,7 +145,7 @@ export class TicketUseCase {
                             }
                         }
                     } else if (selectedSeat[i].category === "gold") {
-                        const seatsInRow = showSeat.gold.seats.get(row);
+                        const seatsInRow = showSeatNew.gold.seats.get(row);
                         if (seatsInRow) {
                             for (let j = 0; j < seatsInRow.length; j++) {
                                 const seat = seatsInRow[j];
@@ -147,7 +156,7 @@ export class TicketUseCase {
                             }
                         }
                     } else {
-                        const seatsInRow = showSeat.silver.seats.get(row);
+                        const seatsInRow = showSeatNew.silver.seats.get(row);
                         if (seatsInRow) {
                             for (let j = 0; j < seatsInRow.length; j++) {
                                 const seat = seatsInRow[j];
@@ -161,7 +170,7 @@ export class TicketUseCase {
                 }
 
                 // Update the showSeat in the database after expiring temporary bookings
-                await this.showSeatRepository.udateShowSeatById(seatId, showSeat);
+                await this.showSeatRepository.udateShowSeatById(seatId, showSeatNew);
             },10 * 60 * 1000); // 10 minutes in milliseconds
             return get200Response(tempTicket);
 
@@ -282,6 +291,8 @@ export class TicketUseCase {
         };
 
         const ticket = await this.ticketRepository.saveTicket(obj);
+
+        const updatedShow = await this.showRepository.updatedAvailSeat(tempTicket.showId._id, -tempTicket.seatCount)        
 
         const showSeat = await this.showSeatRepository.findShowSeatById(tempTicket.showId.seatId);
 
@@ -451,6 +462,8 @@ export class TicketUseCase {
             
                     await this.showSeatRepository.udateShowSeatByIdS(show?.seatId, showSeat);
                 }
+
+                const updatedShow = await this.showRepository.updatedAvailSeat(ticket.showId, ticket.seatCount)
 
                 const updatedTicket = await this.ticketRepository.cancelTicket(ticketId)
 

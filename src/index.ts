@@ -38,7 +38,6 @@ mongoConnect()
                 userSockets.set(id, socket.id);
 
                 socket.on('send-message', async (chatData: IChatReqs) => {
-                    console.log('send-message: ',chatData);
                     let recipientId: string;
                     // let senderId: ID;
                     if (chatData.sender === 'User') {
@@ -51,7 +50,7 @@ mongoConnect()
 
                     const savedData = await chatUseCase.sendMessage(chatData)
                     
-                    // socket.broadcast.emit('recieve-message', savedData);
+                    socket.broadcast.emit('recieve-message', savedData);
                     // socket.to(userSockets.get(senderId as unknown as string) as string).emit('recieve-message', savedData);
                 });
 

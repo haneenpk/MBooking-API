@@ -18,10 +18,18 @@ export class ShowRepository implements IShowRepo {
     return await showModel.findByIdAndUpdate(
       { _id: showId },
       {
-          $set: showToEdit
+        $set: showToEdit
       },
       { new: true }
-  )
+    )
+  }
+
+  async updatedAvailSeat(id: ID, seatCount: number) {
+    return await showModel.findByIdAndUpdate(
+      { _id: id },
+      { $inc: { availableSeatCount: seatCount } },
+      { new: true }
+    )
   }
 
   async findShowBySId(id: string): Promise<IShow | null> {
@@ -161,11 +169,11 @@ export class ShowRepository implements IShowRepo {
         { movieId: new ObjectId(movieId) },
         { date: { $gte: startOfDay, $lt: new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000) } }
       ]
-    });
+    }).populate('screenId')
   }
 
-  async deleteShow (showId: ID): Promise<any> {
+  async deleteShow(showId: ID): Promise<any> {
     return await showModel.findByIdAndDelete(showId)
-}
+  }
 
 }

@@ -34,23 +34,22 @@ export class ChatRepository implements IChatRepo {
         )
     }
 
-    async getChatHistoryUpdate(userId: string | undefined, theaterId: string | undefined, role: string | undefined): Promise<IChatRes | null> {
+    async getChatHistoryUpdate(userId: string | undefined, theaterId: string | undefined, messages: any): Promise<IChatRes | null> {
         return await chatModel.findOneAndUpdate(
             { 
                 $and: [
                     { userId: userId },
                     { theaterId: theaterId },
-                    { "messages.sender": role },
                   ]
             },
-            { $set: { "messages.$[].isRead": true } },
+            { $set: { messages: messages } },
             { new: true }
         );
     }
 
     async getTheatersChattedWith (userId: string): Promise<ITheaterRes[]> {
         const allChats = await chatModel.find({ userId }).populate('theaterId')
-        const theaters = allChats.map(chat => chat.theaterId)
+        const theaters = allChats.map(chat => chat)
         return theaters as unknown as ITheaterRes[]
     }
 
