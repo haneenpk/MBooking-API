@@ -53,13 +53,9 @@ export class ChatRepository implements IChatRepo {
         return theaters as unknown as ITheaterRes[]
     }
 
-    async getUsersChattedWith (theaterId: string): Promise<IUsersListForChats[]> {
+    async getUsersChattedWith (theaterId: string): Promise<any> {
         const allChats = await chatModel.find({ theaterId }).populate('userId')
-        const users: IUsersListForChats[] = allChats.map(chat => {
-            const { _id, username, profilePic } = chat.userId as unknown as IUserRes;
-            return { _id: _id.toString(), username, profilePic };
-        })
-        
+        const users: any = allChats.map(chat => chat)       
         return users;
     }
 

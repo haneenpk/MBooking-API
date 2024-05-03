@@ -21,6 +21,7 @@ export interface IUsersListForChats {
     _id: string
     username: string
     profilePic?: string
+    chat: any;
 }
 
 export interface IChatReadReqs { 
