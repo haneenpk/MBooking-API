@@ -400,6 +400,97 @@ export class TicketUseCase {
         }
     }
 
+    async getChartData(theaterId: string): Promise<any> {
+        try {
+            const tickets = await this.ticketRepository.getTicketsByTheaterId(theaterId);
+    
+            let obj: { [month: string]: number } = {
+                'Jan': 0,
+                'Feb': 0,
+                'Mar': 0,
+                'Apr': 0,
+                'May': 0,
+                'Jun': 0,
+                'Jul': 0,
+                'Aug': 0,
+                'Sep': 0,
+                'Oct': 0,
+                'Nov': 0,
+                'Dec': 0,
+            };
+    
+            // Count tickets for each month
+            tickets.forEach(ticket => {
+                const createdAt = new Date(ticket.createdAt);
+                const month = createdAt.toLocaleString('en-US', { month: 'short' });
+                obj[month] += ticket.seatCount;
+            });
+
+            let Arr = Object.values(obj)
+            
+    
+            return {
+                status: STATUS_CODES.OK,
+                message: 'Success',
+                data: Arr,
+            };
+    
+        } catch (error) {
+            console.error('Error:', error);
+            return {
+                status: STATUS_CODES.INTERNAL_SERVER_ERROR,
+                message: 'Error occurred while fetching chart data',
+                data: null,
+            };
+        }
+    }
+
+    async getAllChartData (): Promise<any> {
+        try {
+
+            const tickets = await this.ticketRepository.getTicketsAll();
+
+            let obj: { [month: string]: number } = {
+                'Jan': 0,
+                'Feb': 0,
+                'Mar': 0,
+                'Apr': 0,
+                'May': 0,
+                'Jun': 0,
+                'Jul': 0,
+                'Aug': 0,
+                'Sep': 0,
+                'Oct': 0,
+                'Nov': 0,
+                'Dec': 0,
+            };
+    
+            // Count tickets for each month
+            tickets.forEach(ticket => {
+                const createdAt = new Date(ticket.createdAt);
+                const month = createdAt.toLocaleString('en-US', { month: 'short' });
+                obj[month] += ticket.seatCount;
+            });
+
+            let Arr = Object.values(obj)
+            
+    
+            return {
+                status: STATUS_CODES.OK,
+                message: 'Success',
+                data: Arr,
+            };
+            
+        } catch (error) {
+            console.error('Error:', error);
+            return {
+                status: STATUS_CODES.INTERNAL_SERVER_ERROR,
+                message: 'Error occurred while fetching chart data',
+                data: null,
+            };
+        }
+    }
+
     async cancelTicket(ticketId: string): Promise<any> {
         try {
             const ticket = await this.ticketRepository.findTicketById(ticketId);

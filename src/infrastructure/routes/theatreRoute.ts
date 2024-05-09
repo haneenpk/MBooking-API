@@ -11,6 +11,8 @@ thrRouter.post('/resendOTP', (req, res) => tController.resendOTP(req, res))
 
 thrRouter.get('/get/:theaterId', theaterAuth, (req,res) => tController.getTheaterData(req,res))
 
+thrRouter.get('/get/ChartData/:theaterId', theaterAuth, (req, res) => ticketController.getChartData(req, res))
+
 thrRouter.put('/update/:theaterId', theaterAuth, (req, res) => tController.updateTheaterData(req, res))
 
 thrRouter.get('/screens/:theaterId', theaterAuth, (req, res) => scnController.findScreensInTheater(req, res))

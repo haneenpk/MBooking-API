@@ -56,6 +56,17 @@ export class TicketController {
         res.status(apiRes.status).json(apiRes)
     }
 
+    async getChartData (req: Request, res: Response) {        
+        const theaterId = req.params.theaterId as unknown as string
+        const apiRes = await this.ticketUseCase.getChartData(theaterId)
+        res.status(apiRes.status).json(apiRes)
+    }
+
+    async getAllChartData (req: Request, res: Response) {        
+        const apiRes = await this.ticketUseCase.getAllChartData()
+        res.status(apiRes.status).json(apiRes)
+    }
+
     // async bookTicket (req: Request, res: Response) {
     //     const ticketReqs: ITempTicketReqs = req.body.ticketReqs
     //     const apiRes = await this._ticketUseCase.bookTicketDataTemporarily(ticketReqs)

@@ -36,5 +36,7 @@ adminRouter.patch('/movie/edit/image/:movieId', upload.single('image'), adminAut
 
 adminRouter.get('/tickets', adminAuth, (req, res) => ticketController.getAllTickets(req,res))
 
+adminRouter.get('/chart/all', adminAuth, (req, res) => ticketController.getAllChartData(req,res))
+
 
 export default adminRouter

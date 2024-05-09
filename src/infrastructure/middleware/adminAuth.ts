@@ -22,6 +22,7 @@ export const adminAuth = async (req: Request, res: Response, next: NextFunction)
           const adminData = await adminRepository.findById(decoded.id);
   
           if (adminData !== null) {
+            console.log("admin :",adminData);
             next();
           } else {
             res.status(UNAUTHORIZED).json({ message: 'Not authorized, invalid token' });
