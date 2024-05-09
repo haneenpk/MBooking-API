@@ -17,23 +17,33 @@ export class AdminUseCase {
     async verifyLogin(email:string, password: string): Promise<IApiAdminAuthRes>{
         const adminData = await this.adminRepository.findAdmin()
         if(adminData !== null){
-            const passwordMatch = await this.encrypt.comparePasswords(password, adminData.password)
-            if(passwordMatch){
-                const accessToken = this.jwtToken.generateAccessToken(adminData._id)
-                return {
-                    status: STATUS_CODES.OK,
-                    message: 'Success',
-                    data: adminData,
-                    accessToken,
+            if(adminData.email === email){
+                const passwordMatch = await this.encrypt.comparePasswords(password, adminData.password)
+                if(passwordMatch){
+                    const accessToken = this.jwtToken.generateAccessToken(adminData._id)
+                    return {
+                        status: STATUS_CODES.OK,
+                        message: 'Success',
+                        data: adminData,
+                        accessToken,
+                    }
+                }else{
+                    return {
+                        status: STATUS_CODES.UNAUTHORIZED,
+                        message: 'Incorrect Password',
+                        data : null,
+                        accessToken: '',
+                    }
                 }
             }else{
                 return {
                     status: STATUS_CODES.UNAUTHORIZED,
-                    message: 'Incorrect Password',
+                    message: 'Invalid Email',
                     data : null,
                     accessToken: '',
                 }
             }
+
         }else{
             return {
                 status: STATUS_CODES.UNAUTHORIZED,
